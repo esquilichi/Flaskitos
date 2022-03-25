@@ -58,12 +58,14 @@ def leer_datos():
 def insertar_datos(legal, users):
     c, conn = connect_db("../database/database.db")
     create_tables(c, conn)
+    lista = list()
+    # Guardar todos los datos en una sola lista para hacer un insert del tirón, mucho más facil que ir 1 a 1
     for i in legal['legal']:
         for j in i.keys():
-            print(i)  # {'www.nbcckcip.com': {'cookies': 0, 'aviso': 1, 'proteccion_de_datos': 0, 'creacion': 2002}}
-            print(i[j])  # Esto imprime ->{'cookies': 0, 'aviso': 1, 'proteccion_de_datos': 0, 'creacion': 2002}
-            print(i[j]["cookies"])  # Esto imprime -> 0
-            print(i[j]["creacion"]) # Esto imprime -> 2007
+            mytuple = (j, i[j]["cookies"], i[j]["aviso"], i[j]["proteccion_de_datos"], i[j]["creacion"])
+            lista.append(mytuple)
+        c.executemany('INSERT OR IGNORE INTO legal VALUES(?,?,?,?,?)', lista)
+        conn.commit()
 
 def connect_db(file):
     conn = sqlite3.connect(file)
