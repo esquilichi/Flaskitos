@@ -78,10 +78,10 @@ def insertar_datos(legal, users):
             print(l)
             mytuple = (j, i[j]['telefono'], i[j]['contrasena'], i[j]['provincia'],
                        i[j]['permisos'],
-                       i[j]['emails']['total'], i[j]['emails']['phishing'], i[j]['emails']['cliclados'])
+                       i[j]['emails']['total'], i[j]['emails']['phishing'], i[j]['emails']['cliclados'], tb64(i[j]['fechas']), tb64(i[j]['ips']))
             lista.append(mytuple)
-            #print(lista)
-        c.executemany('INSERT OR IGNORE INTO users VALUES(?,?,?,?,?,?,?,?)', lista)
+            #print(lista).
+        c.executemany('INSERT OR IGNORE INTO users VALUES(?,?,?,?,?,?,?,?,?,?)', lista)
     conn.commit()
     conn.close()
 
@@ -104,7 +104,7 @@ def create_tables(c, conn):
                "proteccion_datos integer, creacion integer, "
                "PRIMARY KEY(url))"))
     c.execute("CREATE TABLE users (username text, telefono integer , contrasena text, provincia text, "
-              "permisos bool, emails_total integer , emails_phishing integer , emails_ciclados integer, "
+              "permisos bool, emails_total integer , emails_phishing integer , emails_ciclados integer, fechas text, ips text, "
               "PRIMARY KEY(username))")
 
     conn.commit()
