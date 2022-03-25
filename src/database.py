@@ -38,7 +38,29 @@ def main():
         conn.commit()
         conn.close()
 """
+#
+# Funciones auxiliares para interpretar arrays
+tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8'))
+fb64 = lambda x: base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '')
+tlistdf = lambda _series: pd.Series([x for _list in _series for x in _list])
 
+def create_dataframes() -> pd.DataFrame:
+    c, conn = connect_db("../database/database.db")
+    dframe = pd.read_sql_query("SELECT * FROM users", conn)
+
+    #dframe['ips'] = dframe['ips'].apply(fb64)
+    #dframe['fechas'] = dframe['fechas'].apply(fb64)
+    #dframe['fechas'] = dframe['fechas'].apply(eval)
+
+
+
+    print(dframe['fechas'])
+    print(dframe['fechas'].min())
+    print(tlistdf(dframe['fechas']).max())
+    #dframe.ips = str(fb64(dframe.ips))
+    #print(dframe)
+
+    pass
 
 def leer_datos():
     # Abrir los ficheros
@@ -71,11 +93,10 @@ def insertar_datos(legal, users):
     lista = list()
     for i in users['usuarios']:
         for j in i.keys():
-            tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8'))
-            fb64 = lambda x: base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '').split(', ')
+
             a = tb64(i[j]['fechas'])
             l = fb64(a)
-            print(l)
+            #print(l)
             mytuple = (j, i[j]['telefono'], i[j]['contrasena'], i[j]['provincia'],
                        i[j]['permisos'],
                        i[j]['emails']['total'], i[j]['emails']['phishing'], i[j]['emails']['cliclados'], tb64(i[j]['fechas']), tb64(i[j]['ips']))
@@ -114,6 +135,7 @@ def create_tables(c, conn):
 def main():
     legal, users = leer_datos()
     insertar_datos(legal, users)
+    create_dataframes()
 
 
 if __name__ == '__main__':
