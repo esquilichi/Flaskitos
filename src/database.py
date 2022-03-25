@@ -65,7 +65,19 @@ def insertar_datos(legal, users):
             mytuple = (j, i[j]["cookies"], i[j]["aviso"], i[j]["proteccion_de_datos"], i[j]["creacion"])
             lista.append(mytuple)
         c.executemany('INSERT OR IGNORE INTO legal VALUES(?,?,?,?,?)', lista)
-        conn.commit()
+    conn.commit()
+
+    lista = list()
+    for i in users['usuarios']:
+        for j in i.keys():
+            mytuple = (j, i[j]['telefono'], i[j]['contrasena'], i[j]['provincia'],
+                       i[j]['permisos'],
+                       i[j]['emails']['total'], i[j]['emails']['phishing'], i[j]['emails']['cliclados'])
+            lista.append(mytuple)
+            print(lista)
+        c.executemany('INSERT OR IGNORE INTO users VALUES(?,?,?,?,?,?,?,?)', lista)
+    conn.commit()
+    conn.close()
 
 def connect_db(file):
     conn = sqlite3.connect(file)
