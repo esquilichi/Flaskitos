@@ -1,6 +1,7 @@
 import json
 import sqlite3
 import pandas as pd
+import base64
 
 """
 Con esto leemos el fichero, obtenemos un diccionario con todo el JSON cargado y accedemos a cada uno -> [1] o [n]...
@@ -70,11 +71,16 @@ def insertar_datos(legal, users):
     lista = list()
     for i in users['usuarios']:
         for j in i.keys():
+            tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8'))
+            fb64 = lambda x: base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '').split(', ')
+            a = tb64(i[j]['fechas'])
+            l = fb64(a)
+            print(l)
             mytuple = (j, i[j]['telefono'], i[j]['contrasena'], i[j]['provincia'],
                        i[j]['permisos'],
                        i[j]['emails']['total'], i[j]['emails']['phishing'], i[j]['emails']['cliclados'])
             lista.append(mytuple)
-            print(lista)
+            #print(lista)
         c.executemany('INSERT OR IGNORE INTO users VALUES(?,?,?,?,?,?,?,?)', lista)
     conn.commit()
     conn.close()
