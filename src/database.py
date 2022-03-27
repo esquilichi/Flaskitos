@@ -42,12 +42,9 @@ def main():
 # Funciones auxiliares para interpretar arrays
 tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8')) #Conversor a base64 para almacenar en bbdd
 fb64 = lambda x: list(base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '').split(', ')) #Conversor desde base64 para dataframe
-#clist = lambda x: x.str.len()  #Conversor de listas a n elementos
+clist = lambda x: x.str.len()  #Conversor de listas a n elementos
 
-def clist(x):
-    tolist = x.str.len()
-    print("Entrando", x.str)
-    return tolist
+
 
 def create_dataframes() -> pd.DataFrame:
     c, conn = connect_db("../database/database.db")
