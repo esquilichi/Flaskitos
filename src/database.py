@@ -42,9 +42,7 @@ def main():
 #
 # Funciones auxiliares para interpretar arrays
 tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8')) #Conversor a base64 para almacenar en bbdd
-#fb64 = lambda x: list(base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '').split(', '))#Conversor desde base64 para dataframe
 clist = lambda x: x.str.len()  #Conversor de listas a n elementos
-
 def fb64(x):
     decode = base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '')
     if decode != "None":
@@ -52,23 +50,20 @@ def fb64(x):
     else:
         return ''
 
+
+#
+# Creacion del dataframe
+#
+
 def create_dataframes() -> pd.DataFrame:
     c, conn = connect_db("../database/database.db")
     dframe = pd.read_sql_query("SELECT * FROM users", conn)
-
     dframe['ips'] = dframe['ips'].apply(fb64)
     dframe['fechas'] = dframe['fechas'].apply(fb64)
-    #print(dframe['fechas'])
-    #print(dframe['ips'])
-    #print("Maximo de fechas",clist(dframe['fechas']).max())
     print(clist(dframe['ips']))
-
     print("Minimo de ips\n", clist(dframe['ips']).max())
-    #print(tlistdf(dframe['fechas']).value_counts())
-    #dframe.ips = str(fb64(dframe.ips))
-    #print(dframe)
 
-    pass
+    return dframe
 
 def leer_datos():
     # Abrir los ficheros
@@ -139,11 +134,27 @@ def create_tables(c, conn):
     conn.commit()
     return
 
+def ejercicio1(df: pd.DataFrame):
+    df = df.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
+    for i, x in df.iterrows():
+        #print("i", i, "\nx",  x)
+        print(f"id {i}", x)
+        print(x['provincia'])
+        print(x.isna())
+        if x['provincia']:
+            #x['provincia'] = np.nan
+            pass
+    #print(df['provincia'])
+    print(df.isna().sum())
+    print("Provincias sin rellenar: ", df['provincia'].isna().sum())
+
 
 def main():
     legal, users = leer_datos()
     insertar_datos(legal, users)
-    create_dataframes()
+    df = create_dataframes()
+    ejercicio1(df)
+
 
 
 if __name__ == '__main__':
