@@ -65,6 +65,24 @@ def create_dataframes() -> pd.DataFrame:
 
     return dframe
 
+def min_fechas(df: pd.DataFrame):
+    i = len(df['fechas'][0])
+    print(i)
+    for j in df['fechas']:
+        if len(j) < i:
+            i = len(j)
+    return i
+
+
+def max_fechas(df):
+    i = len(df['fechas'][0])
+    print(i)
+    for j in df['fechas']:
+        if len(j) > i:
+            i = len(j)
+    return i
+
+
 def leer_datos():
     # Abrir los ficheros
     datos_legal = open("../Logs/legal.json", "r")
@@ -134,27 +152,28 @@ def create_tables(c, conn):
     conn.commit()
     return
 
-def ejercicio1(df: pd.DataFrame):
-    df = df.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
-    for i, x in df.iterrows():
-        #print("i", i, "\nx",  x)
-        print(f"id {i}", x)
-        print(x['provincia'])
-        print(x.isna())
-        if x['provincia']:
-            #x['provincia'] = np.nan
-            pass
-    #print(df['provincia'])
-    print(df.isna().sum())
-    print("Provincias sin rellenar: ", df['provincia'].isna().sum())
 
+def ejercicio2(df: pd.DataFrame):
+    df = df.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
+    muestras = len(df) * len(df.columns)
+    print("Muestras -> " + str(int(muestras) - int(df.isna().sum().sum())))
+    print("Media de fechas en las que se ha iniciado sesión -> " + str(len(df['fechas'].sum()) / len(df)))
+    #  print(df.keys())
+    print("Desviación estándar del total de fechas en las que se han inicaido sesión -> " + str(df.groupby('username').count().std()[0]))
+    print("Provincias sin rellenar: ", df['provincia'].isna().sum())
+    print("Media de emails recibidos -> ", (df['emails_total'].mean()))
+    print("Desviación estándar de emails recibidos -> ", df['emails_total'].std())
+    #  print("Desviación estándar de emails recibidos -> ", np.std(df['emails_total'].to_numpy())) da un valor ligeramente distinto
+    print("Valor mínimo del total de fechas que se ha inciado sesión -> ", min_fechas(df))
+    print("Valor máximo del total de fehcas que se ha iniciado sesión -> ", max_fechas(df))
+    print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].min())
+    print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].max())
 
 def main():
     legal, users = leer_datos()
     insertar_datos(legal, users)
     df = create_dataframes()
-    ejercicio1(df)
-
+    ejercicio2(df)
 
 
 if __name__ == '__main__':
