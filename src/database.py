@@ -170,7 +170,7 @@ def ejercicio2(df: pd.DataFrame):
     print("Desviación estandar de las IPS que se han detectado ->", clist(df['ips']).std())
     #  print("Desviación estándar de emails recibidos -> ", np.std(df['emails_total'].to_numpy())) da un valor ligeramente distinto
     print("Valor mínimo del total de fechas que se ha inciado sesión -> ", min_fechas(df))
-    print("Valor máximo del total de fehcas que se ha iniciado sesión -> ", max_fechas(df))
+    print("Valor máximo del total de fechas que se ha iniciado sesión -> ", max_fechas(df))
     print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].min())
     print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].max())
 
