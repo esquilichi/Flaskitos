@@ -60,6 +60,7 @@ def create_dataframes() -> pd.DataFrame:
     dframe = pd.read_sql_query("SELECT * FROM users", conn)
     dframe['ips'] = dframe['ips'].apply(fb64)
     dframe['fechas'] = dframe['fechas'].apply(fb64)
+    dframe = dframe.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
     return dframe
 
 def min_fechas(df: pd.DataFrame):
@@ -149,15 +150,24 @@ def create_tables(c, conn):
 
 
 def ejercicio2(df: pd.DataFrame):
-    df = df.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
     muestras = len(df) * len(df.columns)
     print("Muestras -> " + str(int(muestras) - int(df.isna().sum().sum())))
-    print("Media de fechas en las que se ha iniciado sesión -> " + str(len(df['fechas'].sum()) / len(df)))
+    #print("Media de fechas en las que se ha iniciado sesión -> " + str(len(df['fechas'].sum()) / len(df)))
+    print("Media de fechas en las que se ha iniciado sesión -> ", clist(df['fechas']).mean())
+    print("Desviación estandar de fechas en las que se ha iniciado sesión -> ", clist(df['fechas']).std())
+    print("Desviación estándar del total de fechas en las que se han iniciado sesión (version grupby) -> " + str(df.groupby('username').count().std()[0]))
+    #TODO Revisar las desviaciones estandar
+    print("---- Desviacion estandar por usuario ----")
+    print(clist(df['fechas']) / clist(df['fechas']).mean())
+    print("-------------------------")
     #  print(df.keys())
-    print("Desviación estándar del total de fechas en las que se han inicaido sesión -> " + str(df.groupby('username').count().std()[0]))
+
     print("Provincias sin rellenar: ", df['provincia'].isna().sum())
     print("Media de emails recibidos -> ", (df['emails_total'].mean()))
     print("Desviación estándar de emails recibidos -> ", df['emails_total'].std())
+    #print("Media de las IPS que se han detectado ->", clist(df['ips']).sum() / len(df))
+    print("Media de las IPS que se han detectado ->", clist(df['ips']).mean())
+    print("Desviación estandar de las IPS que se han detectado ->", clist(df['ips']).std())
     #  print("Desviación estándar de emails recibidos -> ", np.std(df['emails_total'].to_numpy())) da un valor ligeramente distinto
     print("Valor mínimo del total de fechas que se ha inciado sesión -> ", min_fechas(df))
     print("Valor máximo del total de fehcas que se ha iniciado sesión -> ", max_fechas(df))
