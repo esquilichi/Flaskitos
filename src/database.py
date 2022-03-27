@@ -60,14 +60,10 @@ def create_dataframes() -> pd.DataFrame:
     dframe = pd.read_sql_query("SELECT * FROM users", conn)
     dframe['ips'] = dframe['ips'].apply(fb64)
     dframe['fechas'] = dframe['fechas'].apply(fb64)
-    print(clist(dframe['ips']))
-    print("Minimo de ips\n", clist(dframe['ips']).max())
-
     return dframe
 
 def min_fechas(df: pd.DataFrame):
     i = len(df['fechas'][0])
-    print(i)
     for j in df['fechas']:
         if len(j) < i:
             i = len(j)
@@ -76,7 +72,6 @@ def min_fechas(df: pd.DataFrame):
 
 def max_fechas(df):
     i = len(df['fechas'][0])
-    print(i)
     for j in df['fechas']:
         if len(j) > i:
             i = len(j)
@@ -168,6 +163,7 @@ def ejercicio2(df: pd.DataFrame):
     print("Valor máximo del total de fehcas que se ha iniciado sesión -> ", max_fechas(df))
     print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].min())
     print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].max())
+
 
 def main():
     legal, users = leer_datos()
