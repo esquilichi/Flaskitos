@@ -32,7 +32,33 @@ def ejercicio3():
     print("Varianza -> ", p1['emails_phishing'].var())
     print("Valor máximo -> ", p1['emails_phishing'].max())
     print("Valor mínimo -> ", p1['emails_phishing'].min())
+    print()
+
+
+def ejercicio3_v2():
+    _, conn = connect_db("../database/database.db")
+    p0 = pd.read_sql_query("SELECT * FROM users WHERE emails_total < 200", conn)
+    p1 = pd.read_sql_query("SELECT * FROM users WHERE emails_total >= 200", conn)
+    conn.close()
+    print("MENOS DE 200 CORREOS")
+    print("Número de observaciones -> ", p0['emails_phishing'].sum())
+    print("Número de valores ausentes -> ", count_missing(p0['emails_phishing'].isna()))
+    print("Mediana -> ", p0['emails_phishing'].median())
+    print("Media -> ", p0['emails_phishing'].mean())
+    print("Varianza -> ", p0['emails_phishing'].var())
+    print("Valor máximo -> ", p0['emails_phishing'].max())
+    print("Valor mínimo -> ", p0['emails_phishing'].min())
+    print()
+    print("MENOS DE 200 CORREOS")
+    print("Número de observaciones -> ", p1['emails_phishing'].sum())
+    print("Número de valores ausentes -> ", count_missing(p1['emails_phishing'].isna()))
+    print("Mediana -> ", p1['emails_phishing'].median())
+    print("Media -> ", p1['emails_phishing'].mean())
+    print("Varianza -> ", p1['emails_phishing'].var())
+    print("Valor máximo -> ", p1['emails_phishing'].max())
+    print("Valor mínimo -> ", p1['emails_phishing'].min())
 
 
 if __name__ == '__main__':
     ejercicio3()
+    ejercicio3_v2()
