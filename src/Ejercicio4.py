@@ -54,17 +54,22 @@ def top_users_plot(df: pd.DataFrame):
     df.plot(x='username', y='porcentaje_click', kind='bar', figsize=(12.8, 7.2))
     plt.title('Top 10 usuarios críticos según su porcentaje de clicks en phising', loc='left')
     plt.ylim((0,100))
+    plt.xlabel('Usuarios')
+    plt.ylabel('% de clicks en phising')
     plt.show()
 
 def get_paginas_desactualizadas(df: pd.DataFrame):
     for i, r in df.iterrows():
         df._set_value(i, 'n_politicas', r['cookies'] + r['aviso'] + r['proteccion_datos'])
-    return df.sort_values(['n_politicas', 'creacion'], ascending=[False, True]).head(5)
+    print(df.sort_values(['n_politicas', 'creacion'], ascending=[True, True]).head(5))
+    return df.sort_values(['n_politicas', 'creacion'], ascending=[True, True]).head(5)
 
 def paginas_plot(df: pd.DataFrame):
     df.plot(x='url', y='n_politicas', kind='bar',figsize=(12.8, 7.2))
-    plt.ylim()
+    plt.ylim((0, 4))
     plt.title('Top 5 paginas web con más políticas desactualizadas', loc='left')
+    plt.xlabel('Sitios web')
+    plt.ylabel('Número de políticas')
     plt.savefig('../graphics/4-2.png', dpi=400)
     plt.show()
 
