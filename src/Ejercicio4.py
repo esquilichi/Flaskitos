@@ -100,7 +100,35 @@ def conexiones_usuario(df: pd.DataFrame):
     plt.show()
 
 def comparativa_porano(df: pd.DataFrame):
-    pass
+    print("Tabla completa:")
+    print(df.groupby('creacion').value_counts())
+    anos = (df.groupby('creacion').groups.keys())
+    i = int(-1)
+    cumplen = []
+    nocumplen = []
+    lastyear = int(-9999999)
+    for el in df.groupby('creacion').value_counts().iteritems():
+        if lastyear != el[0][0]:
+            lastyear = el[0][0]
+            i += 1
+            cumplen.append(0)
+            nocumplen.append(0)
+        if el[0][2] == 1 and el[0][3] == 1 and el[0][4] == 1:
+            cumplen[i] += 1
+        else:
+            nocumplen[i]+=1
+
+    index_barras = np.arange(len(anos))
+    ancho = 0.35
+    plt.figure(figsize=(12.8, 7.2))
+    plt.bar(index_barras, cumplen, width=ancho, label='Sitios que cumplen')
+    plt.bar(index_barras + ancho, nocumplen, width=ancho, label='Sitios que no cumplen')
+    plt.legend(loc='best')
+    plt.xticks(index_barras+(ancho/2), anos)
+    plt.xlabel('Años')
+    plt.ylabel('Sitios')
+    plt.show()
+
 
 
 
@@ -120,11 +148,12 @@ def ejercicio4():
     paginas_plot(legal0)
 
     # Punto 3 TODO Revisar entre todos el tema de los porcentajes
-    df3 = pd.read_sql_query("SELECT username, fechas from users", conn)
+    df3 = pd.read_sql_query("SELECT username, fechas FROM users", conn)
     conexiones_usuario(df3)
 
     # Punto 4 TODO
-
+    df4 = pd.read_sql_query("SELECT * FROM legal", conn)
+    comparativa_porano(df4)
 
     # Punto 5
     comprometidas = len(open("../database/criticos.txt").readlines())
