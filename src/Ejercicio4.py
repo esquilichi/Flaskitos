@@ -62,6 +62,7 @@ def get_paginas_desactualizadas(df: pd.DataFrame):
 def paginas_plot(df: pd.DataFrame):
     df.plot(x='url', y='creacion', kind='bar',figsize=(12.8, 7.2))
     plt.ylim((1990, 2022))
+    #plt.savefig('../graphics/4-3.png', dpi=400)
     plt.show()
 
 
@@ -69,8 +70,10 @@ def comprometidas_plot(comprometidas: list, no_comprometidas: list):
     fig = plt.figure(figsize=(12.8, 7.2))
     headers = ['Comprometidas', 'No Comprometidas']
     nu = [comprometidas, no_comprometidas]
-    plt.bar(headers, nu, width=0.4)
-    plt.title("Contraseñas comprometidas vs no comprometidas")
+    plt.title("Contraseñas comprometidas vs no comprometidas", loc='left')
+    plt.pie(nu, labels=headers, autopct=lambda _: f"{int((_/100)*(comprometidas + no_comprometidas))}", colors=["#40D4FF", "#FEDD23"])
+    plt.axis("equal")
+    plt.savefig('../graphics/4-5.png', dpi=400)
     plt.show()
 
 def conexiones_usuario(df: pd.DataFrame):
@@ -96,7 +99,8 @@ def conexiones_usuario(df: pd.DataFrame):
     nu = [porcentaje_criticos, porcentaje_ncriticos]
     plt.pie(nu, labels=headers, autopct="%0.1f %%", colors=["#FD1E0F", "#3EFA02"], explode=(0,0.1))
     plt.axis("equal")
-    #plt.title("Porcentaje de inicios de sesión de criticos y no criticos")
+    plt.title("Porcentaje de inicios de sesión de criticos y no criticos", loc='left')
+    plt.savefig('../graphics/4-3.png', dpi=400)
     plt.show()
 
 def comparativa_porano(df: pd.DataFrame):
@@ -129,7 +133,7 @@ def comparativa_porano(df: pd.DataFrame):
     plt.yticks(np.arange(0, max(cumplen + nocumplen) + 2))# +2→ 1 para incluir el maximo, otro por estetica
     plt.xlabel('Años')
     plt.ylabel('Sitios')
-    plt.savefig('../graphics/prueba.png', dpi=400)
+    plt.savefig('../graphics/4-4.png', dpi=400)
     plt.show()
 
 
@@ -145,7 +149,7 @@ def ejercicio4(df: pd.DataFrame, df_legal: pd.DataFrame):
     df2 = usuarios_criticos(df1)
     top_users_plot(df2.head(10))
 
-    # Punto 2
+    # Punto 2 #TODO Revisar como se genera esto, no me cuadra lo de los años @Gallego
     legal0 = get_paginas_desactualizadas(df_legal)
     paginas_plot(legal0)
 
