@@ -41,7 +41,6 @@ def crack_hashes():
     with open("../database/hashes.txt") as h:
         for i in h:
             lista.append(i.strip().split(":")[1])
-    print("Hasta aqui bien")
     with open("../database/10000_passwords.txt", encoding='utf8') as f:
         for i in f.read().splitlines():
             linea = hashlib.md5(bytes(i, encoding='utf8'))
@@ -118,7 +117,7 @@ def ejercicio4():
     legal0 = get_paginas_desactualizadas(pd.read_sql_query("SELECT * from legal", conn))
     paginas_plot(legal0)
 
-    # Punto 3 TODO Revisar entre todos
+    # Punto 3 TODO Revisar entre todos el tema de los porcentajes
     df3 = pd.read_sql_query("SELECT username, fechas from users", conn)
     conexiones_usuario(df3)
 
