@@ -13,7 +13,7 @@ def porcentaje_peligro(df0: pd.DataFrame) -> pd.DataFrame:
     # clican en emails de phishing
     for i, r in df0.iterrows():
         if r['emails_phishing'] != 0:
-            df0._set_value(i, "porcentaje_click", r['emails_ciclados'] / r['emails_phishing'])
+            df0._set_value(i, "porcentaje_click", r['emails_ciclados'] / r['emails_phishing']*100)
         else:
             df0._set_value(i, "porcentaje_click", 0)
     return df0.sort_values("porcentaje_click", ascending=False)
@@ -51,7 +51,9 @@ def crack_hashes():
 
 
 def top_users_plot(df: pd.DataFrame):
-    df.plot(x='username', y='emails_ciclados', kind='bar', figsize=(12.8, 7.2))
+    df.plot(x='username', y='porcentaje_click', kind='bar', figsize=(12.8, 7.2))
+    plt.title('Top 10 usuarios críticos según su porcentaje de clicks en phising', loc='left')
+    plt.ylim((0,100))
     plt.show()
 
 def get_paginas_desactualizadas(df: pd.DataFrame):
@@ -62,6 +64,7 @@ def get_paginas_desactualizadas(df: pd.DataFrame):
 def paginas_plot(df: pd.DataFrame):
     df.plot(x='url', y='n_politicas', kind='bar',figsize=(12.8, 7.2))
     plt.ylim()
+    plt.title('Top 5 paginas web con más políticas desactualizadas', loc='left')
     plt.savefig('../graphics/4-2.png', dpi=400)
     plt.show()
 
@@ -133,6 +136,7 @@ def comparativa_porano(df: pd.DataFrame):
     plt.yticks(np.arange(0, max(cumplen + nocumplen) + 2))# +2→ 1 para incluir el maximo, otro por estetica
     plt.xlabel('Años')
     plt.ylabel('Sitios')
+    plt.title('Comparativa de webs que cumplían con las políticas de privacidad por año', loc='left')
     plt.savefig('../graphics/4-4.png', dpi=400)
     plt.show()
 
@@ -149,11 +153,11 @@ def ejercicio4(df: pd.DataFrame, df_legal: pd.DataFrame):
     print(df2)
     top_users_plot(df2.head(10))
 
-    # Punto 2 #TODO Revisar como se genera esto, no me cuadra lo de los años @Gallego
+    # Punto 2
     legal0 = get_paginas_desactualizadas(df_legal)
     paginas_plot(legal0)
 
-    # Punto 3 TODO Revisar entre todos el tema de los porcentajes
+    # Punto 3
     conexiones_usuario(df)
 
     # Punto 4
