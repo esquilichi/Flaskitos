@@ -92,7 +92,7 @@ def conexiones_usuario(df: pd.DataFrame):
     print("Inicios de criticos respecto inicios totales", counter_criticos / total * 100, "%")
     porcentaje_criticos = counter_criticos / total * 100
     porcentaje_ncriticos = no_criticos / total * 100
-    print("Inicios de criticos respecto inicios totales", no_criticos / total * 100, "%")
+    print("Inicios de no criticos respecto inicios totales", no_criticos / total * 100, "%")
     fig = plt.figure(figsize=(12.8, 7.2))
     headers = ['Inicios de sesion de cuentas criticas', 'Inicios de sesion de cuentas no criticas']
     nu = [porcentaje_criticos, porcentaje_ncriticos]

@@ -41,15 +41,14 @@ def main():
 """
 #
 # Funciones auxiliares para interpretar arrays
+
 tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8')) #Conversor a base64 para almacenar en bbdd
-clist = lambda x: x.str.len()  #Conversor de listas a n elementos
 def fb64(x):
     decode = base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '')
     if decode != "None":
         return list(decode.split(', '))
     else:
         return ''
-
 
 #
 # Creacion del dataframe
@@ -63,23 +62,8 @@ def create_dataframes() -> pd.DataFrame:
     dframe = dframe.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
     return dframe
 
-def min_fechas(df: pd.DataFrame):
-    i = len(df['fechas'][0])
-    for j in df['fechas']:
-        if len(j) < i:
-            i = len(j)
-    return i
 
-
-def max_fechas(df):
-    i = len(df['fechas'][0])
-    for j in df['fechas']:
-        if len(j) > i:
-            i = len(j)
-    return i
-
-
-def leer_datos():
+def leer_datos() -> dict :
     # Abrir los ficheros
     datos_legal = open("../Logs/legal.json", "r")
     datos_users = open("../Logs/users.json", "r")
@@ -145,39 +129,10 @@ def create_tables(c, conn):
     conn.commit()
     return
 
-
-def ejercicio2(df: pd.DataFrame):
-    muestras = len(df) * len(df.columns)
-    print("Muestras -> " + str(int(muestras) - int(df.isna().sum().sum())))
-    #print("Media de fechas en las que se ha iniciado sesión -> " + str(len(df['fechas'].sum()) / len(df)))
-    print("Media de fechas en las que se ha iniciado sesión -> ", clist(df['fechas']).mean())
-    print("Desviación estandar de fechas en las que se ha iniciado sesión -> ", clist(df['fechas']).std())
-    print("Desviación estándar del total de fechas en las que se han iniciado sesión (version grupby) -> " + str(df.groupby('username').count().std()[0]))
-    #TODO Revisar las desviaciones estandar
-    print("---- Desviacion estandar por usuario ----")
-    print(clist(df['fechas']) / clist(df['fechas']).mean())
-    print("-------------------------")
-    #  print(df.keys())
-
-    print("Provincias sin rellenar: ", df['provincia'].isna().sum())
-    print("Media de emails recibidos -> ", (df['emails_total'].mean()))
-    print("Desviación estándar de emails recibidos -> ", df['emails_total'].std())
-    #print("Media de las IPS que se han detectado ->", clist(df['ips']).sum() / len(df))
-    print("Media de las IPS que se han detectado ->", clist(df['ips']).mean())
-    print("Desviación estandar de las IPS que se han detectado ->", clist(df['ips']).std())
-    #  print("Desviación estándar de emails recibidos -> ", np.std(df['emails_total'].to_numpy())) da un valor ligeramente distinto
-    print("Valor mínimo del total de fechas que se ha inciado sesión -> ", min_fechas(df))
-    print("Valor máximo del total de fechas que se ha iniciado sesión -> ", max_fechas(df))
-    print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].min())
-    print("Valor mínimo del número de emails recibidos -> ", df['emails_total'].max())
-
-
-def main():
+def generar_dataframes() -> pd.DataFrame:
     legal, users = leer_datos()
     insertar_datos(legal, users)
     df = create_dataframes()
-    ejercicio2(df)
+    return df
 
 
-if __name__ == '__main__':
-    main()
