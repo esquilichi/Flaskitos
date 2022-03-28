@@ -41,16 +41,17 @@ def crack_hashes():
     with open("../database/hashes.txt") as h:
         for i in h:
             lista.append(i.strip().split(":")[1])
-
-    with open("../database/10000_passwords.txt") as f:
+    print("Hasta aqui bien")
+    with open("../database/10000_passwords.txt", encoding='utf8') as f:
         for i in f.read().splitlines():
             linea = hashlib.md5(bytes(i, encoding='utf8'))
             if linea.hexdigest() in lista:
                 criticos.write(lines_that_contain(linea.hexdigest(), u)[0].split(":")[0] + "\n")
 
 
+
 def top_users_plot(df: pd.DataFrame):
-    df.plot(x='username', y='emails_phishing', kind='bar')
+    df.plot(x='username', y='emails_phishing', kind='bar', figsize=(12.8, 7.2))
     plt.show()
 
 def get_paginas_desactualizadas(df: pd.DataFrame):
@@ -59,18 +60,48 @@ def get_paginas_desactualizadas(df: pd.DataFrame):
     return df.sort_values(['n_politicas', 'creacion'], ascending=[False, True]).head(5)
 
 def paginas_plot(df: pd.DataFrame):
-    df.plot(x='url', y='creacion', kind='bar')
+    df.plot(x='url', y='creacion', kind='bar',figsize=(12.8, 7.2))
     plt.ylim((1990, 2022))
     plt.show()
 
 
 def comprometidas_plot(comprometidas, no_comprometidas):
-    fig = plt.figure(figsize = (10, 5))
+    fig = plt.figure(figsize=(12.8, 7.2))
     headers = ['Comprometidas', 'No Comprometidas']
     nu = [comprometidas, no_comprometidas]
     plt.bar(headers, nu, width=0.4)
     plt.title("Contraseñas comprometidas vs no comprometidas")
     plt.show()
+
+def conexiones_usuario(df: pd.DataFrame):
+    df['fechas'] = df['fechas'].apply(fb64)
+    df['n_conexiones'] = clist(df['fechas'])
+    total = df['n_conexiones'].sum()
+    counter_criticos = int(0)
+    with open('../database/criticos.txt') as f:
+        for line in f:
+            name = line.strip('\n')
+            user = df.loc[df['username'] == name, 'n_conexiones']
+            #print(user)
+            #print(user.values[0])
+            counter_criticos += int(user.values[0])
+    print("Inicios sesion criticos", counter_criticos)
+    no_criticos = total - counter_criticos
+    print("Inicios de sesion no criticos", no_criticos)
+    print("Inicios de criticos respecto inicios totales", counter_criticos / total * 100, "%")
+    porcentaje_criticos = counter_criticos / total * 100
+    porcentaje_ncriticos = no_criticos / total * 100
+    print("Inicios de criticos respecto inicios totales", no_criticos / total * 100, "%")
+    fig = plt.figure(figsize=(12.8, 7.2))
+    headers = ['Inicios de sesion criticos', 'Inicios de sesion no criticos']
+    nu = [porcentaje_criticos, porcentaje_ncriticos]
+    plt.bar(headers, nu, width=0.4)
+    plt.title("Porcentaje de inicios de sesión de criticos y no criticos")
+    plt.show()
+
+
+
+
 
 def ejercicio4():
     _, conn = connect_db("../database/database.db")
@@ -87,7 +118,9 @@ def ejercicio4():
     legal0 = get_paginas_desactualizadas(pd.read_sql_query("SELECT * from legal", conn))
     paginas_plot(legal0)
 
-    # Punto 3 TODO
+    # Punto 3 TODO Revisar entre todos
+    df3 = pd.read_sql_query("SELECT username, fechas from users", conn)
+    conexiones_usuario(df3)
 
     # Punto 4 TODO
 

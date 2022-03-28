@@ -134,9 +134,6 @@ def create_tables(c, conn):
     c.execute("DROP TABLE IF EXISTS users")
     c.execute("DROP TABLE IF EXISTS legal")
     # Crear las tablas para los datos
-    # En emails, no se me ha ocurrido otra cosa que separar en 3 el apartado de emails (siempre son 3 datos)
-    # TODO no he hecho la parte de fechas, creo que tendría que ir en una tabla aparte con clave foránea a users
-    # TODO lo mismo que el anterior comentario pero con las IPs, está en array de n valores arbitrarios
     c.execute(("CREATE TABLE legal"
                "(url data , cookies integer, aviso integer, "
                "proteccion_datos integer, creacion integer, "
