@@ -1,3 +1,5 @@
+import numpy as np
+
 from database import *
 import pandas as pd
 import hashlib
@@ -125,8 +127,11 @@ def comparativa_porano(df: pd.DataFrame):
     plt.bar(index_barras + ancho, nocumplen, width=ancho, label='Sitios que no cumplen')
     plt.legend(loc='best')
     plt.xticks(index_barras+(ancho/2), anos)
+    print(max(cumplen + nocumplen))
+    plt.yticks(np.arange(0, max(cumplen + nocumplen) + 2))# +2→ 1 para incluir el maximo, otro por estetica
     plt.xlabel('Años')
     plt.ylabel('Sitios')
+    plt.savefig('../graphics/prueba.png', dpi=400)
     plt.show()
 
 
@@ -151,7 +156,7 @@ def ejercicio4():
     df3 = pd.read_sql_query("SELECT username, fechas FROM users", conn)
     conexiones_usuario(df3)
 
-    # Punto 4 TODO
+    # Punto 4
     df4 = pd.read_sql_query("SELECT * FROM legal", conn)
     comparativa_porano(df4)
 
