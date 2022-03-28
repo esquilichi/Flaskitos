@@ -61,6 +61,7 @@ def create_dataframes() -> pd.DataFrame:
     dframe['ips'] = dframe['ips'].apply(fb64)
     dframe['fechas'] = dframe['fechas'].apply(fb64)
     dframe = dframe.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
+    dframe['emails_phishing'] = dframe['emails_phishing'].replace({0: np.NaN})
     dframe2 = pd.read_sql_query("SELECT * FROM legal", conn)
     return dframe, dframe2
 

@@ -4,7 +4,7 @@ Practica 1
 Estas son las respuestas obtenidas para cada uno de los apartados de la practica:
 ------Ejercicio 2------
 
-Muestras -> 280
+Muestras -> 279
 Media de fechas en las que se ha iniciado sesión -> 9.866666666666667
 Desviación estandar de fechas en las que se ha iniciado sesión -> 6.055680338972335
 Desviación estándar del total de fechas en las que se han iniciado sesión (version grupby) -> 0.4794633014853841
@@ -22,39 +22,39 @@ Valor mínimo del número de emails recibidos -> 493
 ------Ejercicio 3------
 
 USUARIOS CON PERMISO 0
-Número de observaciones -> 1277
-Número de valores ausentes -> 0
-Mediana -> 41.0
-Media -> 79.8125
-Varianza -> 9881.229166666666
-Valor máximo -> 382
-Valor mínimo -> 0
+Número de observaciones -> 1277.0
+Número de valores ausentes -> 1
+Mediana -> 49.0
+Media -> 85.13333333333334
+Varianza -> 10101.695238095239
+Valor máximo -> 382.0
+Valor mínimo -> 8.0
 
 USUARIOS CON PERMISO 1
-Número de observaciones -> 2003
+Número de observaciones -> 2003.0
 Número de valores ausentes -> 0
 Mediana -> 138.0
 Media -> 143.07142857142858
 Varianza -> 12490.840659340658
-Valor máximo -> 372
-Valor mínimo -> 1
+Valor máximo -> 372.0
+Valor mínimo -> 1.0
 
 MENOS DE 200 CORREOS
-Número de observaciones -> 699
+Número de observaciones -> 699.0
 Número de valores ausentes -> 0
 Mediana -> 41.0
 Media -> 58.25
 Varianza -> 1945.1136363636363
-Valor máximo -> 133
-Valor mínimo -> 1
+Valor máximo -> 133.0
+Valor mínimo -> 1.0
 
 200 CORREOS O MÁS
-Número de observaciones -> 2581
-Número de valores ausentes -> 0
-Mediana -> 134.5
-Media -> 143.38888888888889
-Varianza -> 15699.545751633985
-Valor máximo -> 382
-Valor mínimo -> 0
+Número de observaciones -> 2581.0
+Número de valores ausentes -> 1
+Mediana -> 143.0
+Media -> 151.8235294117647
+Varianza -> 15320.154411764704
+Valor máximo -> 382.0
+Valor mínimo -> 8.0
 
 ----Fin del ejercicio 3----
