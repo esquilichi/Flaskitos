@@ -60,8 +60,8 @@ def get_paginas_desactualizadas(df: pd.DataFrame):
     return df.sort_values(['n_politicas', 'creacion'], ascending=[False, True]).head(5)
 
 def paginas_plot(df: pd.DataFrame):
-    df.plot(x='url', y='creacion', kind='bar',figsize=(12.8, 7.2))
-    plt.ylim((1990, 2022))
+    df.plot(x='url', y='n_politicas', kind='bar',figsize=(12.8, 7.2))
+    plt.ylim()
     #plt.savefig('../graphics/4-3.png', dpi=400)
     plt.show()
 
