@@ -1,6 +1,6 @@
 import pandas as pd
+from database import clist
 
-clist = lambda x: x.str.len()  #Conversor de listas a n elementos
 
 def min_fechas(df: pd.DataFrame) -> int:
     i = len(df['fechas'][0])

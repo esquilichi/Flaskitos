@@ -1,15 +1,14 @@
 import numpy as np
-
-from database import *
+from database import clist
 import pandas as pd
 import hashlib
 import matplotlib.pyplot as plt
 
 
-def lines_that_contain(string: str, fp):
+def lines_that_contain(string: str, fp) -> list:
     return [line for line in fp if string in line]
 
-def porcentaje_peligro(df0: pd.DataFrame):
+def porcentaje_peligro(df0: pd.DataFrame) -> pd.DataFrame:
     # Esto lo que hace es crear una columna "porcentaje_click" en un nuevo dataframe para conocer los usuarios que mas
     # clican en emails de phishing
     for i, r in df0.iterrows():
@@ -20,7 +19,7 @@ def porcentaje_peligro(df0: pd.DataFrame):
     return df0.sort_values("porcentaje_click", ascending=False)
 
 
-def usuarios_criticos(df0: pd.DataFrame):
+def usuarios_criticos(df0: pd.DataFrame) -> pd.DataFrame:
     lines = open("../database/criticos.txt").read().splitlines()
     for i, r in df0.iterrows():
         if r['username'] in lines:
@@ -66,7 +65,7 @@ def paginas_plot(df: pd.DataFrame):
     plt.show()
 
 
-def comprometidas_plot(comprometidas, no_comprometidas):
+def comprometidas_plot(comprometidas: list, no_comprometidas: list):
     fig = plt.figure(figsize=(12.8, 7.2))
     headers = ['Comprometidas', 'No Comprometidas']
     nu = [comprometidas, no_comprometidas]
@@ -75,7 +74,6 @@ def comprometidas_plot(comprometidas, no_comprometidas):
     plt.show()
 
 def conexiones_usuario(df: pd.DataFrame):
-    df['fechas'] = df['fechas'].apply(fb64)
     df['n_conexiones'] = clist(df['fechas'])
     total = df['n_conexiones'].sum()
     counter_criticos = int(0)
@@ -137,36 +135,31 @@ def comparativa_porano(df: pd.DataFrame):
 
 
 
-def ejercicio4():
-    _, conn = connect_db("../database/database.db")
+def ejercicio4(df: pd.DataFrame, df_legal: pd.DataFrame):
     # Obtener todos los hashes de los usuarios
     # Punto 1
-    df0 = pd.read_sql_query("SELECT username, emails_ciclados, emails_phishing, contrasena FROM users", conn)
-    get_all_hashes(df0)
+    #df0 = pd.read_sql_query("SELECT username, emails_ciclados, emails_phishing, contrasena FROM users", conn)
+    get_all_hashes(df)
     crack_hashes()
-    df1 = porcentaje_peligro(df0)
+    df1 = porcentaje_peligro(df)
     df2 = usuarios_criticos(df1)
     top_users_plot(df2.head(10))
 
     # Punto 2
-    legal0 = get_paginas_desactualizadas(pd.read_sql_query("SELECT * from legal", conn))
+    legal0 = get_paginas_desactualizadas(df_legal)
     paginas_plot(legal0)
 
     # Punto 3 TODO Revisar entre todos el tema de los porcentajes
-    df3 = pd.read_sql_query("SELECT username, fechas FROM users", conn)
-    conexiones_usuario(df3)
+    conexiones_usuario(df)
 
     # Punto 4
-    df4 = pd.read_sql_query("SELECT * FROM legal", conn)
-    comparativa_porano(df4)
+    comparativa_porano(df_legal)
 
     # Punto 5
     comprometidas = len(open("../database/criticos.txt").readlines())
     no_comprometidas = len(open("../database/hashes.txt").readlines()) - comprometidas
     comprometidas_plot(comprometidas, no_comprometidas)
 
-    conn.close()
 
 
-if __name__ == '__main__':
-    ejercicio4()
+

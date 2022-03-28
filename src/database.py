@@ -43,6 +43,7 @@ def main():
 # Funciones auxiliares para interpretar arrays
 
 tb64 = lambda x: base64.b64encode(str(x).encode('UTF-8')) #Conversor a base64 para almacenar en bbdd
+clist = lambda x: x.str.len()  #Conversor de listas a n elementos
 def fb64(x):
     decode = base64.b64decode(x).decode('UTF-8').strip('[]').replace('\'', '')
     if decode != "None":
@@ -60,7 +61,8 @@ def create_dataframes() -> pd.DataFrame:
     dframe['ips'] = dframe['ips'].apply(fb64)
     dframe['fechas'] = dframe['fechas'].apply(fb64)
     dframe = dframe.replace({'None': np.NaN, None: np.NaN, '': np.NaN})
-    return dframe
+    dframe2 = pd.read_sql_query("SELECT * FROM legal", conn)
+    return dframe, dframe2
 
 
 def leer_datos() -> dict :
@@ -132,7 +134,7 @@ def create_tables(c, conn):
 def generar_dataframes() -> pd.DataFrame:
     legal, users = leer_datos()
     insertar_datos(legal, users)
-    df = create_dataframes()
-    return df
+    df, df2 = create_dataframes()
+    return df, df2
 
 
