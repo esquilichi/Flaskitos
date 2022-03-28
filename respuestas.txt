@@ -5,56 +5,56 @@ Estas son las respuestas obtenidas para cada uno de los apartados de la practica
 ------Ejercicio 2------
 
 Muestras -> 279
-Media de fechas en las que se ha iniciado sesiÃ³n -> 9.866666666666667
-DesviaciÃ³n estandar de fechas en las que se ha iniciado sesiÃ³n -> 6.055680338972335
-DesviaciÃ³n estÃ¡ndar del total de fechas en las que se han iniciado sesiÃ³n (version grupby) -> 0.4794633014853841
+Media de fechas en las que se ha iniciado sesión -> 9.866666666666667
+Desviación estandar de fechas en las que se ha iniciado sesión -> 6.055680338972335
+Desviación estándar del total de fechas en las que se han iniciado sesión (version grupby) -> 0.4794633014853841
 Provincias sin rellenar: 9
 Media de emails recibidos -> 247.86666666666667
-DesviaciÃ³n estÃ¡ndar de emails recibidos -> 141.44274663167653
+Desviación estándar de emails recibidos -> 141.44274663167653
 Media de las IPS que se han detectado -> 9.931034482758621
-DesviaciÃ³n estandar de las IPS que se han detectado -> 6.152415521465408
-Valor mÃ­nimo del total de fechas que se ha inciado sesiÃ³n -> 1
-Valor mÃ¡ximo del total de fechas que se ha iniciado sesiÃ³n -> 20
-Valor mÃ­nimo del nÃºmero de emails recibidos -> 20
-Valor mÃ­nimo del nÃºmero de emails recibidos -> 493
+Desviación estandar de las IPS que se han detectado -> 6.152415521465408
+Valor mínimo del total de fechas que se ha inciado sesión -> 1
+Valor máximo del total de fechas que se ha iniciado sesión -> 20
+Valor mínimo del número de emails recibidos -> 20
+Valor mínimo del número de emails recibidos -> 493
 
 ----Fin del ejercicio 2----
 ------Ejercicio 3------
 
 USUARIOS CON PERMISO 0
-NÃºmero de observaciones -> 1277.0
-NÃºmero de valores ausentes -> 1
+Número de observaciones -> 1277.0
+Número de valores ausentes -> 1
 Mediana -> 49.0
 Media -> 85.13333333333334
 Varianza -> 10101.695238095239
-Valor mÃ¡ximo -> 382.0
-Valor mÃ­nimo -> 8.0
+Valor máximo -> 382.0
+Valor mínimo -> 8.0
 
 USUARIOS CON PERMISO 1
-NÃºmero de observaciones -> 2003.0
-NÃºmero de valores ausentes -> 0
+Número de observaciones -> 2003.0
+Número de valores ausentes -> 0
 Mediana -> 138.0
 Media -> 143.07142857142858
 Varianza -> 12490.840659340658
-Valor mÃ¡ximo -> 372.0
-Valor mÃ­nimo -> 1.0
+Valor máximo -> 372.0
+Valor mínimo -> 1.0
 
 MENOS DE 200 CORREOS
-NÃºmero de observaciones -> 699.0
-NÃºmero de valores ausentes -> 0
+Número de observaciones -> 699.0
+Número de valores ausentes -> 0
 Mediana -> 41.0
 Media -> 58.25
 Varianza -> 1945.1136363636363
-Valor mÃ¡ximo -> 133.0
-Valor mÃ­nimo -> 1.0
+Valor máximo -> 133.0
+Valor mínimo -> 1.0
 
-200 CORREOS O MÃS
-NÃºmero de observaciones -> 2581.0
-NÃºmero de valores ausentes -> 1
+200 CORREOS O MÁS
+Número de observaciones -> 2581.0
+Número de valores ausentes -> 1
 Mediana -> 143.0
 Media -> 151.8235294117647
 Varianza -> 15320.154411764704
-Valor mÃ¡ximo -> 382.0
-Valor mÃ­nimo -> 8.0
+Valor máximo -> 382.0
+Valor mínimo -> 8.0
 
 ----Fin del ejercicio 3----

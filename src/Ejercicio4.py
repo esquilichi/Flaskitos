@@ -51,7 +51,7 @@ def crack_hashes():
 
 
 def top_users_plot(df: pd.DataFrame):
-    df.plot(x='username', y='emails_phishing', kind='bar', figsize=(12.8, 7.2))
+    df.plot(x='username', y='emails_ciclados', kind='bar', figsize=(12.8, 7.2))
     plt.show()
 
 def get_paginas_desactualizadas(df: pd.DataFrame):
@@ -62,7 +62,7 @@ def get_paginas_desactualizadas(df: pd.DataFrame):
 def paginas_plot(df: pd.DataFrame):
     df.plot(x='url', y='n_politicas', kind='bar',figsize=(12.8, 7.2))
     plt.ylim()
-    #plt.savefig('../graphics/4-3.png', dpi=400)
+    plt.savefig('../graphics/4-2.png', dpi=400)
     plt.show()
 
 
@@ -96,8 +96,8 @@ def conexiones_usuario(df: pd.DataFrame):
     print("Inicios de no criticos respecto inicios totales", no_criticos / total * 100, "%")
     fig = plt.figure(figsize=(12.8, 7.2))
     headers = ['Inicios de sesion de cuentas criticas', 'Inicios de sesion de cuentas no criticas']
-    nu = [porcentaje_criticos, porcentaje_ncriticos]
-    plt.pie(nu, labels=headers, autopct="%0.1f %%", colors=["#FD1E0F", "#3EFA02"], explode=(0,0.1))
+    nu = [counter_criticos, no_criticos]
+    plt.pie(nu, labels=headers, autopct=lambda _: f"{_:0.2f}% ({int((_/100)*(counter_criticos + no_criticos))})", colors=["#FD1E0F", "#3EFA02"], explode=(0,0.1))
     plt.axis("equal")
     plt.title("Porcentaje de inicios de sesión de criticos y no criticos", loc='left')
     plt.savefig('../graphics/4-3.png', dpi=400)
@@ -142,11 +142,11 @@ def comparativa_porano(df: pd.DataFrame):
 def ejercicio4(df: pd.DataFrame, df_legal: pd.DataFrame):
     # Obtener todos los hashes de los usuarios
     # Punto 1
-    #df0 = pd.read_sql_query("SELECT username, emails_ciclados, emails_phishing, contrasena FROM users", conn)
     get_all_hashes(df)
     crack_hashes()
     df1 = porcentaje_peligro(df)
     df2 = usuarios_criticos(df1)
+    print(df2)
     top_users_plot(df2.head(10))
 
     # Punto 2 #TODO Revisar como se genera esto, no me cuadra lo de los años @Gallego
