@@ -92,13 +92,15 @@ def conexiones_usuario(df: pd.DataFrame):
     porcentaje_ncriticos = no_criticos / total * 100
     print("Inicios de criticos respecto inicios totales", no_criticos / total * 100, "%")
     fig = plt.figure(figsize=(12.8, 7.2))
-    headers = ['Inicios de sesion criticos', 'Inicios de sesion no criticos']
+    headers = ['Inicios de sesion de cuentas criticas', 'Inicios de sesion de cuentas no criticas']
     nu = [porcentaje_criticos, porcentaje_ncriticos]
-    plt.bar(headers, nu, width=0.4)
-    plt.title("Porcentaje de inicios de sesión de criticos y no criticos")
+    plt.pie(nu, labels=headers, autopct="%0.1f %%", colors=["#FD1E0F", "#3EFA02"], explode=(0,0.1))
+    plt.axis("equal")
+    #plt.title("Porcentaje de inicios de sesión de criticos y no criticos")
     plt.show()
 
-
+def comparativa_porano(df: pd.DataFrame):
+    pass
 
 
 
@@ -122,6 +124,7 @@ def ejercicio4():
     conexiones_usuario(df3)
 
     # Punto 4 TODO
+
 
     # Punto 5
     comprometidas = len(open("../database/criticos.txt").readlines())
