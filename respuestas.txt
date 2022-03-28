@@ -1,0 +1,60 @@
+Ismael Gomez, Adriano Campos, Alejandro Gallego
+Grupo R
+Practica 1
+Estas son las respuestas obtenidas para cada uno de los apartados de la practica:
+------Ejercicio 2------
+
+Muestras -> 280
+Media de fechas en las que se ha iniciado sesión -> 9.866666666666667
+Desviación estandar de fechas en las que se ha iniciado sesión -> 6.055680338972335
+Desviación estándar del total de fechas en las que se han iniciado sesión (version grupby) -> 0.4794633014853841
+Provincias sin rellenar: 9
+Media de emails recibidos -> 247.86666666666667
+Desviación estándar de emails recibidos -> 141.44274663167653
+Media de las IPS que se han detectado -> 9.931034482758621
+Desviación estandar de las IPS que se han detectado -> 6.152415521465408
+Valor mínimo del total de fechas que se ha inciado sesión -> 1
+Valor máximo del total de fechas que se ha iniciado sesión -> 20
+Valor mínimo del número de emails recibidos -> 20
+Valor mínimo del número de emails recibidos -> 493
+
+----Fin del ejercicio 2----
+------Ejercicio 3------
+
+USUARIOS CON PERMISO 0
+Número de observaciones -> 1277
+Número de valores ausentes -> 0
+Mediana -> 41.0
+Media -> 79.8125
+Varianza -> 9881.229166666666
+Valor máximo -> 382
+Valor mínimo -> 0
+
+USUARIOS CON PERMISO 1
+Número de observaciones -> 2003
+Número de valores ausentes -> 0
+Mediana -> 138.0
+Media -> 143.07142857142858
+Varianza -> 12490.840659340658
+Valor máximo -> 372
+Valor mínimo -> 1
+
+MENOS DE 200 CORREOS
+Número de observaciones -> 699
+Número de valores ausentes -> 0
+Mediana -> 41.0
+Media -> 58.25
+Varianza -> 1945.1136363636363
+Valor máximo -> 133
+Valor mínimo -> 1
+
+200 CORREOS O MÁS
+Número de observaciones -> 2581
+Número de valores ausentes -> 0
+Mediana -> 134.5
+Media -> 143.38888888888889
+Varianza -> 15699.545751633985
+Valor máximo -> 382
+Valor mínimo -> 0
+
+----Fin del ejercicio 3----
