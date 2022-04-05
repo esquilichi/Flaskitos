@@ -1,9 +1,9 @@
 import numpy as np
-from database import clist
 import pandas as pd
 import hashlib
 import matplotlib.pyplot as plt
 
+clist = lambda x: x.str.len()  #Conversor de listas a n elementos
 
 def lines_that_contain(string: str, fp) -> list:
     return [line for line in fp if string in line]
@@ -20,7 +20,7 @@ def porcentaje_peligro(df0: pd.DataFrame) -> pd.DataFrame:
 
 
 def usuarios_criticos(df0: pd.DataFrame) -> pd.DataFrame:
-    lines = open("../database/criticos.txt").read().splitlines()
+    lines = open("Entrega1/database/criticos.txt").read().splitlines()
     for i, r in df0.iterrows():
         if r['username'] in lines:
             df0._set_value(i, "critico", True)
@@ -47,7 +47,6 @@ def crack_hashes():
             linea = hashlib.md5(bytes(i, encoding='utf8'))
             if linea.hexdigest() in lista:
                 criticos.write(lines_that_contain(linea.hexdigest(), u)[0].split(":")[0] + "\n")
-
 
 
 def top_users_plot(df: pd.DataFrame):
