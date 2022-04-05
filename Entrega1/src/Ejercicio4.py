@@ -55,7 +55,7 @@ def top_users_plot(df: pd.DataFrame):
     plt.ylim((0,100))
     plt.xlabel('Usuarios')
     plt.ylabel('% de clicks en phising')
-    plt.show()
+    plt.savefig("static/assets/graficos/users.png")
 
 def get_paginas_desactualizadas(df: pd.DataFrame):
     for i, r in df.iterrows():
