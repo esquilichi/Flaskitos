@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 import base64
-
+path = "Entrega1"
 """
 Con esto leemos el fichero, obtenemos un diccionario con todo el JSON cargado y accedemos a cada uno -> [1] o [n]...
 def main():
@@ -56,7 +56,7 @@ def fb64(x):
 #
 
 def create_dataframes() -> pd.DataFrame:
-    c, conn = connect_db("../database/database.db")
+    c, conn = connect_db(path+"/database/database.db")
     dframe = pd.read_sql_query("SELECT * FROM users", conn)
     dframe['ips'] = dframe['ips'].apply(fb64)
     dframe['fechas'] = dframe['fechas'].apply(fb64)
@@ -68,8 +68,8 @@ def create_dataframes() -> pd.DataFrame:
 
 def leer_datos() -> dict :
     # Abrir los ficheros
-    datos_legal = open("../Logs/legal.json", "r")
-    datos_users = open("../Logs/users.json", "r")
+    datos_legal = open(path+"/Logs/legal.json", "r")
+    datos_users = open(path+"/Logs/users.json", "r")
     # Nos cargamos el diccionarios el contenido en jotason
     legal = json.load(datos_legal)
     users = json.load(datos_users)
@@ -83,7 +83,7 @@ def leer_datos() -> dict :
 # https://stackoverflow.com/questions/18552001/accessing-dict-keys-element-by-index-in-python3
 # Para sacar los valores de cada key he usado esto, bastante fino
 def insertar_datos(legal, users):
-    c, conn = connect_db("../database/database.db")
+    c, conn = connect_db(path+"/database/database.db")
     create_tables(c, conn)
     lista = list()
     # Guardar todos los datos en una sola lista para hacer un insert del tirón, mucho más facil que ir 1 a 1

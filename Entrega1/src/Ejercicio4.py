@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 
 clist = lambda x: x.str.len()  #Conversor de listas a n elementos
 
+pathg = "Entrega1"
+
+
 def lines_that_contain(string: str, fp) -> list:
     return [line for line in fp if string in line]
 
@@ -30,19 +33,19 @@ def usuarios_criticos(df0: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_all_hashes(df: pd.DataFrame):
-    with open("../database/hashesonly.txt", "w") as f:
+    with open(pathg+"/database/hashesonly.txt", "w") as f:
         for index, rows in df.iterrows():
             f.write(str(rows[3]))
             f.write("\n")
 
 def crack_hashes():
     lista = list()
-    u = open("../database/hashes.txt", "r").read().splitlines()
-    criticos = open("../database/criticos.txt", "w")
-    with open("../database/hashes.txt") as h:
+    u = open(pathg+"/database/hashes.txt", "r").read().splitlines()
+    criticos = open(pathg+"/database/criticos.txt", "w")
+    with open(pathg+"/database/hashes.txt") as h:
         for i in h:
             lista.append(i.strip().split(":")[1])
-    with open("../database/10000_passwords.txt", encoding='utf8') as f:
+    with open(pathg+"/database/10000_passwords.txt", encoding='utf8') as f:
         for i in f.read().splitlines():
             linea = hashlib.md5(bytes(i, encoding='utf8'))
             if linea.hexdigest() in lista:
@@ -56,6 +59,8 @@ def top_users_plot(df: pd.DataFrame):
     plt.xlabel('Usuarios')
     plt.ylabel('% de clicks en phising')
     plt.savefig("static/assets/graficos/users.png")
+    #plt.savefig("static/assets/graficos/users.png")
+
 
 def get_paginas_desactualizadas(df: pd.DataFrame):
     for i, r in df.iterrows():
@@ -69,7 +74,7 @@ def paginas_plot(df: pd.DataFrame):
     plt.title('Top 5 paginas web con más políticas desactualizadas', loc='left')
     plt.xlabel('Sitios web')
     plt.ylabel('Número de políticas')
-    plt.savefig('../graphics/4-2.png', dpi=400)
+    plt.savefig(pathg+'/graphics/4-2.png', dpi=400)
     plt.show()
 
 
@@ -80,14 +85,14 @@ def comprometidas_plot(comprometidas: list, no_comprometidas: list):
     plt.title("Contraseñas comprometidas vs no comprometidas", loc='left')
     plt.pie(nu, labels=headers, autopct=lambda _: f"{int((_/100)*(comprometidas + no_comprometidas))}", colors=["#40D4FF", "#FEDD23"])
     plt.axis("equal")
-    plt.savefig('../graphics/4-5.png', dpi=400)
+    plt.savefig(pathg +'/graphics/4-5.png', dpi=400)
     plt.show()
 
 def conexiones_usuario(df: pd.DataFrame):
     df['n_conexiones'] = clist(df['fechas'])
     total = df['n_conexiones'].sum()
     counter_criticos = int(0)
-    with open('../database/criticos.txt') as f:
+    with open(pathg + '/database/criticos.txt') as f:
         for line in f:
             name = line.strip('\n')
             user = df.loc[df['username'] == name, 'n_conexiones']
@@ -107,7 +112,7 @@ def conexiones_usuario(df: pd.DataFrame):
     plt.pie(nu, labels=headers, autopct=lambda _: f"{_:0.2f}% ({int((_/100)*(counter_criticos + no_criticos))})", colors=["#FD1E0F", "#3EFA02"], explode=(0,0.1))
     plt.axis("equal")
     plt.title("Porcentaje de inicios de sesión de criticos y no criticos", loc='left')
-    plt.savefig('../graphics/4-3.png', dpi=400)
+    plt.savefig(pathg + '/graphics/4-3.png', dpi=400)
     plt.show()
 
 def comparativa_porano(df: pd.DataFrame):
@@ -141,7 +146,7 @@ def comparativa_porano(df: pd.DataFrame):
     plt.xlabel('Años')
     plt.ylabel('Sitios')
     plt.title('Comparativa de webs que cumplían con las políticas de privacidad por año', loc='left')
-    plt.savefig('../graphics/4-4.png', dpi=400)
+    plt.savefig(pathg + '/graphics/4-4.png', dpi=400)
     plt.show()
 
 
@@ -168,8 +173,8 @@ def ejercicio4(df: pd.DataFrame, df_legal: pd.DataFrame):
     comparativa_porano(df_legal)
 
     # Punto 5
-    comprometidas = len(open("../database/criticos.txt").readlines())
-    no_comprometidas = len(open("../database/hashes.txt").readlines()) - comprometidas
+    comprometidas = len(open(pathg+"/database/criticos.txt").readlines())
+    no_comprometidas = len(open(pathg+"/database/hashes.txt").readlines()) - comprometidas
     comprometidas_plot(comprometidas, no_comprometidas)
 
 
