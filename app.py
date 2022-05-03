@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, render_template, redirect, url_for, request, send_file
+from flask import Flask, render_template, redirect, url_for, request, send_file, Response
 from Entrega1.src.database import *
 from Entrega1.src.Ejercicio4 import *
 app = Flask(__name__)
@@ -25,6 +25,19 @@ def get_graphic(id):
         return send_file("Entrega1/graphics/"+id+".png")
     except Exception as e:
         return str(e)
+
+
+@app.route('/users/<id>', methods=['GET'])
+def get_datajotason(id):
+    try:
+        c, conn = connect_db("Entrega1/database/database.db")
+        df1 = pd.read_sql_query("select * from users", conn)
+        df1 = porcentaje_peligro(df1)
+        df1 = usuarios_criticos(df1)
+        return Response(df1.to_json(orient='index'), mimetype='application/json')
+    except Exception as e:
+        return str(e)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
