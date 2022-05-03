@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, send_file
 from Entrega1.src.database import *
 from Entrega1.src.Ejercicio4 import *
 app = Flask(__name__)
@@ -19,6 +19,12 @@ def dashboard():
     top_users_plot(df1)
     return render_template('pages/dashboard.html')
 
+@app.route('/graphics/<id>', methods=['GET'])
+def get_graphic(id):
+    try:
+        return send_file("Entrega1/graphics/"+id+".png")
+    except Exception as e:
+        return str(e)
 
 if __name__ == '__main__':
     app.run(debug=True)
