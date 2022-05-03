@@ -20,6 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../../static/assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../../static/assets/img/favicon.png">
+  <script src="/static/assets/js/main.js"></script>
   <title>
     Soft UI Dashboard by Creative Tim
   </title>
@@ -461,7 +462,18 @@
                     </a>
                   </div>
                 </div>
-                  <img class="w-100 position-relative z-index-2 pt-4" src='../static/assets/graficos/users.png' alt="rocket" id="graph1">
+                  <img id="escaparate-graficos" class="w-100 position-relative z-index-2 pt-4" src='graphics/users' alt="rocket" id="graph1">
+                  <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      Elige el grafico
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item" onclick="change_graphic('4-1')">Phising</a></li>
+                      <li><a class="dropdown-item" onclick="change_graphic('users')">Users</a></li>
+                      <li><a class="dropdown-item" onclick="change_graphic('4-4')">Webs Vulnerables</a></li>
+
+                    </ul>
+                  </div>
               </div>
             </div>
           </div>
