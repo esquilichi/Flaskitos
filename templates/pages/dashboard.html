@@ -20,13 +20,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="../../static/assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../../static/assets/img/favicon.png">
-  <script src="/static/assets/js/main.js"></script>
+  
   <title>
     Soft UI Dashboard by Creative Tim
   </title>
   <!--     Fonts and icons     -->
+   <!--Import jQuery before export.js-->
+   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+   <!-- <script type="text/javascript" src="/static/assets/js/datatables/jquery-3.6.0.min.js"></script> -->
+
+
+   <!--Data Table-->
+   <script type="text/javascript"  src=" https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+   <script type="text/javascript"  src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+  <!--  <script type="text/javascript"  src="/static/assets/js/datatables/jquery.dataTables.min.js"></script>
+   <script type="text/javascript"  src=" https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script> -->
+
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-  <link href="https://cdn.datatables.net/1.12.0/css/jquery.dataTables.min.css" rel="stylesheet" />
+
   <!-- Nucleo Icons -->
   <link href="../../static/assets/css/nucleo-icons.css" rel="stylesheet" />
   <link href="../../static/assets/css/nucleo-svg.css" rel="stylesheet" />
@@ -35,7 +48,7 @@
   <link href="../../static/assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../../static/assets/css/soft-ui-dashboard.css?v=1.0.5" rel="stylesheet" />
-    <script src="/static/assets/js/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/assets/js/main.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -485,7 +498,7 @@
                     <p class="mb-1 pt-2 text-bold">Últimos CVEs</p>
                   </div>
                 </div>
-                  <table id="MyTable">
+                  <table id="cve_table">
                       <thead>
                         <tr>
                         <th>ID</th>
@@ -514,7 +527,7 @@
                     <p class="mb-1 pt-2 text-bold">Últimas entradas de ExploitDB</p>
                   </div>
                 </div>
-                  <table id="MyTable">
+                  <table id="exploit_table">
                       <thead>
                         <tr>
                         <th>Descripción del Exploit</th>
@@ -523,11 +536,11 @@
                         </tr>
                       </thead>
                     {% for i in exploits %}
-                    <TR>
-                        <TD class="c1">{{ i.name }}</TD>
-                        <TD class="c2"><a href="{{i.link}}">link</a></TD>
-                        <TD class="c3">{{i.category}}</TD>
-                    </TR>
+                    <tr>
+                        <td class="c1">{{ i.name }}</td>
+                        <td class="c2"><a href="{{i.link}}">link</a></td>
+                        <td class="c3">{{i.category}}</td>
+                    </tr>
                     {% endfor %}
                   </table>
               </div>
@@ -651,9 +664,14 @@
   <script src="../../static/assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../static/assets/js/plugins/chartjs.min.js"></script>
 
-  <script>$(document).ready( function () {
-    $('#MyTable').DataTable();
-} );</script>
+  <script>
+  $.noConflict();
+  jQuery(document).ready(()=>{
+    console.log("alo");
+    jQuery("#cve_table").DataTable();
+    jQuery("#exploit_table").DataTable();
+  })
+</script>
   <script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
 
