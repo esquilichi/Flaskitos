@@ -515,6 +515,13 @@
                   </div>
                 </div>
                   <table id="MyTable">
+                      <thead>
+                        <tr>
+                        <th>Descripción del Exploit</th>
+                        <th>Enlace</th>
+                        <th>Categoría</th>
+                        </tr>
+                      </thead>
                     {% for i in exploits %}
                     <TR>
                         <TD class="c1">{{ i.name }}</TD>
