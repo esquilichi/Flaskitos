@@ -13,7 +13,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <meta charset="utf-8" />
@@ -475,7 +475,7 @@
                   <img id="escaparate-graficos" class="w-100 position-relative z-index-2 pt-4" src='graphics/users' alt="rocket" id="graph1">
                   <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                      Elige el grafico
+                      Elige el gráfico
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <li><a class="dropdown-item" onclick="change_graphic('4-1')">Phising</a></li>
@@ -488,7 +488,7 @@
             </div>
           </div>
         </div>
-          <div class="row">
+      <div class="row">
         <div class="col">
           <div class="card">
             <div class="card-body p-3">
@@ -519,6 +519,34 @@
               </div>
             </div>
           </div>
+        <div class="col">
+          <div class="card">
+            {% if data %}
+                <div id='chart' class='chart'”></div>
+                <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                <script type='text/javascript'>
+                var graphs = {{data | safe}};
+                Plotly.plot('chart',graphs,{});
+            </script>
+            {% endif %}
+             <div>
+               <form  onsubmit="edit_plotly()">
+                  <div class="form-group">
+                 <label for="porcentaje">Parámetros</label>
+                      <label for="porcentaje">
+                        <select class="form-control" id="porcentaje">
+                            <option value="True">Más del 50% de porcentaje de click</option>
+                            <option value="False">Menos del 50% de porcentaje de click</option>
+                        </select>
+                      </label>
+                      <label for="n_usuarios">
+                          <input type="text" value="10" id="n_usuarios">
+                      </label>
+                 </div>
+                   <input type="submit" value="Submit">
+              </form>
+             </div>
+        </div>
         <div class="card">
             <div class="card-body p-3">
               <div class="row">

@@ -11,9 +11,11 @@ import requests
 import feedparser
 import plotly
 import plotly.graph_objects as go
+import plotly.express as px
 
 
 app = Flask(__name__)
+
 
 def get_driver():
     # Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
@@ -29,26 +31,37 @@ def get_driver():
     return driver
 
 
+def tratar_dataframe(df: pd.DataFrame, b: bool):
+    if not b:
+        df = df.loc[df['porcentaje_click'] < 50]
+    return df
+
+
 @app.route('/')
 def hello_world():
     return redirect(url_for('dashboard'))
+
 
 @app.route('/dashboard')
 def dashboard():
     l = ejercicio4()
     exploit_list = exploitdb()
     x = request.args.get('n', default=10, type=int)
+    critico = request.args.get('critico', default=True, type=bool)
     c, conn = connect_db("Entrega1/database/database.db")
     df1 = pd.read_sql_query("select * from users", conn)
     df1 = porcentaje_peligro(df1)
     df1 = usuarios_criticos(df1).head(x)
+    df1 = tratar_dataframe(df1, critico)
     top_users_plot(df1)
-    return render_template('pages/dashboard.html', item=l, exploits=exploit_list)
+    data = plotlyF(df1)
+    return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data)
+
 
 @app.route('/graphics/<id>', methods=['GET'])
 def get_graphic(id):
     try:
-        return send_file("Entrega1/graphics/"+id+".png")
+        return send_file("Entrega1/graphics/" + id + ".png")
     except Exception as e:
         return str(e)
 
@@ -63,6 +76,16 @@ def get_datajotason(id):
         return Response(df1.to_json(orient='index'), mimetype='application/json')
     except Exception as e:
         return str(e)
+
+
+def plotlyF(df: pd.DataFrame):
+    trace = go.Bar(x=df["username"], y=df["porcentaje_click"])
+    layout = go.Layout(title="Top usuarios críticos", xaxis=dict(title="username"),
+                       yaxis=dict(title="porcentaje_click"))
+    data = [trace]
+    fig = go.Figure(data=data, layout=layout)
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return fig_json
 
 
 def ejercicio4():
