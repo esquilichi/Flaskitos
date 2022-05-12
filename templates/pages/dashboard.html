@@ -485,13 +485,22 @@
                   </div>
                 </div>
                   <table id="MyTable">
-                    {% for i in item %}
+                      <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>CVSS</th>
+                            <th>Resumen</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for i in item %}
                     <TR>
-                        <TD class="c1">{{ i.id }}</TD>
+                    <TD class="c1">{{ i.id }}</TD>
                         <TD class="c2">{{i.cvss}}</TD>
                         <TD class="c3">{{i.summary}}</TD>
                     </TR>
                     {% endfor %}
+                  </tbody>
                   </table>
               </div>
             </div>
