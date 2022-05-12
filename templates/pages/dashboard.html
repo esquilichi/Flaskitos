@@ -35,6 +35,7 @@
   <link href="../../static/assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../../static/assets/css/soft-ui-dashboard.css?v=1.0.5" rel="stylesheet" />
+    <script src="/static/assets/js/datatables/jquery.dataTables.min.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -519,7 +520,6 @@
                         <TD class="c1">{{ i.name }}</TD>
                         <TD class="c2"><a href="{{i.link}}">link</a></TD>
                         <TD class="c3">{{i.category}}</TD>
-                        <TD class="c4">{{ i.date }}</TD>
                     </TR>
                     {% endfor %}
                   </table>
@@ -643,7 +643,6 @@
   <script src="../../static/assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../static/assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="../../static/assets/js/plugins/chartjs.min.js"></script>
-  <script src="/static/assets/js/datatables/jquery.dataTables.min.js"></script>
 
   <script>$(document).ready( function () {
     $('#MyTable').DataTable();

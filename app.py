@@ -82,9 +82,7 @@ def exploitdb():
         name = article.description
         link = article.link
         category = article.title.split("]")[0][1:]
-        raw_date = article.published.split(", ")[1].rsplit(" ", 1)[0]
-        date = datetime.strptime(raw_date, "%d %b %Y %H:%M:%S")
-        exploitdb_list.append({"name": name, "category": category, "link": link, "date": date, "saved": False})
+        exploitdb_list.append({"name": name, "category": category, "link": link, "saved": False})
     return exploitdb_list
 
 
