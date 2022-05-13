@@ -48,6 +48,7 @@ def dashboard():
     exploit_list = exploitdb()
     x = request.args.get('n', default=10, type=int)
     critico = request.args.get('critico', default=True, type=bool)
+    print(x, critico)
     c, conn = connect_db("Entrega1/database/database.db")
     df1 = pd.read_sql_query("select * from users", conn)
     df1 = porcentaje_peligro(df1)
