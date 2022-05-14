@@ -1,6 +1,7 @@
 import os
 from subprocess import call
 
+import graphviz
 import pandas as pd
 from sklearn import tree, linear_model
 from sklearn.ensemble import RandomForestClassifier
@@ -46,6 +47,17 @@ if __name__ == '__main__':
             c += 1
     print("Decision Tree classified as vulnerable", str(c), "users")
 
+    dot_data = tree.export_graphviz(clf, out_file=None)
+    graph = graphviz.Source(dot_data)
+    dot_data = tree.export_graphviz(clf,
+                                    out_file='machinelearning/gráficos/decision_tree.dot',
+                                    feature_names=['Emails Recibidos', 'Emails Clickados'],
+                                    class_names=['No vulnerable', 'Vulnerable'],
+                                    rounded=True, proportion=False,
+                                    precision=2, filled=True)
+    call(['dot', '-Tpng', 'machinelearning/gráficos/decision_tree.dot',
+          '-o', 'machinelearning/gráficos/decision_tree.png', '-Gdpi=600'])
+
     """
     RANDOM FOREST 
     """
@@ -71,6 +83,7 @@ if __name__ == '__main__':
     print("Mean squared error: %.2f" % mean_squared_error(y_train,
                                                           y_predict))
 
+
     """
     EXPORT GRAPHVIZ DOT AND PNG FILES OF DECISION TREES
     """
@@ -84,4 +97,4 @@ if __name__ == '__main__':
                         rounded=True, proportion=False,
                         precision=2, filled=True)
         call(['dot', '-Tpng', 'machinelearning/gráficos/random_forest.dot',
-              '-o', 'machinelearning/gráficos/png/tree'+str(i)+'.png', '-Gdpi=600'])
+              '-o', 'machinelearning/gráficos/png/tree' + str(i) + '.png', '-Gdpi=600'])
