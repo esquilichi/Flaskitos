@@ -55,8 +55,11 @@ if __name__ == '__main__':
     # Accuracy
     print("Accuracy %.3f" % accuracy_score(y_test, y_predict))
 
+    """
+    EXPORT GRAPHVIZ DOT AND PNG FILES OF DECISION TREES
+    """
     for i in range(len(rf_clf.estimators_)):
-        print(i)
+        # print(i)
         estimator = rf_clf.estimators_[i]
         export_graphviz(estimator,
                         out_file='machinelearning/gráficos/random_forest.dot',
