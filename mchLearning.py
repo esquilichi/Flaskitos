@@ -48,12 +48,12 @@ if __name__ == '__main__':
     for i in y_predict:
         if i == 1:
             c += 1
-    print("Decision Tree classified as vulnerables", str(c), "users")
+    print("Decision Tree classified as vulnerable", str(c), "users")
 
     """
     RANDOM FOREST 
     """
-    rf_clf = RandomForestClassifier(criterion='entropy')
+    rf_clf = RandomForestClassifier(max_depth=2, random_state=0, n_estimators=10)
     rf_clf.fit(x_train, y_train)
 
     # Predict data on test part
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         if i == 1:
             c += 1
 
-    print("Random forest classified as vulnerables", str(c), "users")
+    print("Random forest classified as vulnerable", str(c), "users")
 
     """
     LINEAL REGRESSION
@@ -78,7 +78,6 @@ if __name__ == '__main__':
     """
     EXPORT GRAPHVIZ DOT AND PNG FILES OF DECISION TREES
     """
-    """
     for i in range(len(rf_clf.estimators_)):
         # print(i)
         estimator = rf_clf.estimators_[i]
@@ -90,4 +89,3 @@ if __name__ == '__main__':
                         precision=2, filled=True)
         call(['dot', '-Tpng', 'machinelearning/gráficos/random_forest.dot',
               '-o', 'machinelearning/gráficos/png/tree'+str(i)+'.png', '-Gdpi=600'])
-    """
