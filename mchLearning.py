@@ -1,10 +1,14 @@
+import json
 import os
 from subprocess import call
 
 import graphviz
+import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 from sklearn import tree, linear_model
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, accuracy_score, mean_squared_error
 from sklearn.tree import export_graphviz
 
@@ -77,11 +81,27 @@ if __name__ == '__main__':
     """
     LINEAL REGRESSION
     """
+
+    print(len(x_train))
+    regression_train = x_train[15:]
+    regression_test = x_train[:15]
+
+    regression_train_y = y_train[15:]
+    regression_test_y = y_train[:15]
+    # Create linear regression object
     regr = linear_model.LinearRegression()
-    regr.fit(x_train, y_train)
-    y_predict = regr.predict(predecir)
-    print("Mean squared error: %.2f" % mean_squared_error(y_train,
-                                                          y_predict))
+    # Train the model using the training sets
+    regr.fit(regression_train, regression_train_y)
+    # Make predictions using the testing set
+    predicted_y = regr.predict(regression_test)
+    # The mean squared error
+    print("Mean squared error: %.2f" % mean_squared_error(regression_test_y, predicted_y))
+
+    plt.scatter(np.arange(0,len(regression_test),1), regression_test_y, color="black")
+    plt.plot(0.02 * np.array(regression_test) + regr.intercept_, predicted_y, color="blue", linewidth=3)
+    plt.xticks(())
+    plt.yticks(())
+    plt.show()
 
 
     """
