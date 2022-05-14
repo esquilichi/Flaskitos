@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pandas as pd
-from flask import Flask, render_template, redirect, url_for, request, send_file, Response
+from flask import Flask, render_template, redirect, url_for, request, send_file, Response, session
 import os
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions
@@ -13,16 +13,43 @@ import plotly
 import plotly.graph_objects as go
 import plotly.express as px
 import sqlite3
+from sqlescapy import sqlescape
+from hashlib import sha1
 
 
 app = Flask(__name__)
-
-con = sqlite3.connect('./database/flaskitos.db')
+app.secret_key='probandoaquilaclaveultrasegura'
+con = sqlite3.connect('./database/flaskitos.db', check_same_thread=False)
 cursor = con.cursor()
 
 
+def hash_password(password : str) -> str:
+    return str(sha1(password.encode('latin1')).hexdigest())
+
+
+### SQL functions
 def init_database():
-    cursor.execute("""CREATE TABLE IF NOT EXISTS users_flaskitos(user_id INT, username VARCHAR(250), passwordHash VARCHAR(250))""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS users_flaskitos(user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(250), passwordHash VARCHAR(250), UNIQUE (username))""")
+    con.commit()
+def register_user(username: str, password: str):
+    cursor.execute("""INSERT INTO users_flaskitos(username, passwordHash) VALUES (?, ?)""" , (sqlescape(username), sqlescape(hash_password(password))))
+    con.commit()
+def login_user(username: str, password: str):
+    com = cursor.execute("""SELECT username, passwordHash FROM users_flaskitos WHERE username=(?)""", [sqlescape(username)])
+    res = com.fetchall()
+    if len(res) == 1:
+        if res[0][1] == hash_password(password):
+            return True
+        else:
+            return False
+    elif len(res) == 0:
+        return "No existe" #Cambiar a excepcion
+    else:
+        return "No te portes mal"
+
+
+
+### Fin SQL functions
 
 
 
@@ -49,6 +76,21 @@ def tratar_dataframe(df: pd.DataFrame, b: bool):
 @app.route('/')
 def hello_world():
     return redirect(url_for('dashboard'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    if request.method == 'GET':
+        return render_template('pages/sign-in.html')
+    else:
+        user = request.form['user']
+        passwd = request.form['password']
+        log = login_user(user, passwd)
+        if log == True:
+            session['user'] = (user)
+            return redirect(url_for('dashboard'))
+        
+        
 
 
 @app.route('/dashboard')
@@ -121,4 +163,11 @@ def exploitdb():
 
 if __name__ == '__main__':
     init_database()
+    try:
+        register_user("alex", "1234")
+        register_user("isma", "1234")
+        register_user("adriano", "12345")
+    except:
+        print("ups")
+    login_user("alex", "1234")
     app.run(debug=True)
