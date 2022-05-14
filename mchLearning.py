@@ -22,7 +22,7 @@ def calcular_cliclados(a, b):
 if __name__ == '__main__':
     # Path to json file we are loading
     path_etiquetado = os.getcwd() + '/machinelearning/train.csv'
-    path_predecir = os.getcwd() + '/machinelearning/users_IA_predecir.json'
+    path_predecir = os.getcwd() + '/machinelearning/predict.csv'
 
     col = ['emails_phishing_recibidos', 'emails_phishing_clicados', 'vulnerable']
     col2 = ['emails_phishing_recibidos', 'emails_phishing_clicados']
@@ -34,32 +34,45 @@ if __name__ == '__main__':
     with open(path_predecir, 'r') as f:
         predecir = pd.read_csv(f, names=col2)
 
-    """
-    RANDOM FOREST 
-    """
-
     x_train = datos.drop('vulnerable', axis=1)
     y_train = datos['vulnerable']
 
-    # Split data for testing and for predicting
-    X_train, X_test, Y_train, y_test = train_test_split(x_train, y_train, test_size=0.5)
+    """
+    DECISION TREE
+    """
+    clf = tree.DecisionTreeClassifier()
+    clf = clf.fit(x_train, y_train)
 
+    y_predict = clf.predict(predecir)
+    c = 0
+    for i in y_predict:
+        if i == 1:
+            c += 1
+    print("Decision Tree classified as vulnerables", str(c), "users")
+
+    """
+    RANDOM FOREST 
+    """
     rf_clf = RandomForestClassifier(criterion='entropy')
-    rf_clf.fit(X_train, Y_train)
+    rf_clf.fit(x_train, y_train)
 
     # Predict data on test part
-    y_predict = rf_clf.predict(X_test)
+    y_predict = rf_clf.predict(predecir)
 
-    # Accuracy
-    print("Accuracy %.3f" % accuracy_score(y_test, y_predict))
+    c = 0
+    for i in y_predict:
+        if i == 1:
+            c += 1
+
+    print("Random forest classified as vulnerables", str(c), "users")
 
     """
     LINEAL REGRESSION
     """
     regr = linear_model.LinearRegression()
-    regr.fit(X_train, Y_train)
-    y_predict = regr.predict(X_test)
-    print("Mean squared error: %.2f" % mean_squared_error(y_test,
+    regr.fit(x_train, y_train)
+    y_predict = regr.predict(predecir)
+    print("Mean squared error: %.2f" % mean_squared_error(y_train,
                                                           y_predict))
 
     """
@@ -78,4 +91,3 @@ if __name__ == '__main__':
         call(['dot', '-Tpng', 'machinelearning/gráficos/random_forest.dot',
               '-o', 'machinelearning/gráficos/png/tree'+str(i)+'.png', '-Gdpi=600'])
     """
-
