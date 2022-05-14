@@ -12,9 +12,18 @@ import feedparser
 import plotly
 import plotly.graph_objects as go
 import plotly.express as px
+import sqlite3
 
 
 app = Flask(__name__)
+
+con = sqlite3.connect('./database/flaskitos.db')
+cursor = con.cursor()
+
+
+def init_database():
+    cursor.execute("""CREATE TABLE IF NOT EXISTS users_flaskitos(user_id INT, username VARCHAR(250), passwordHash VARCHAR(250))""")
+
 
 
 def get_driver():
@@ -111,4 +120,5 @@ def exploitdb():
 
 
 if __name__ == '__main__':
+    init_database()
     app.run(debug=True)
