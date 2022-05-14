@@ -1,21 +1,21 @@
 digraph Tree {
 node [shape=box, style="filled, rounded", color="black", fontname="helvetica"] ;
 edge [fontname="helvetica"] ;
-0 [label="Emails Clickados <= 9.0\nentropy = 0.92\nsamples = 10\nvalue = [10, 5]\nclass = No vulnerable", fillcolor="#f2c09c"] ;
-1 [label="entropy = 0.0\nsamples = 5\nvalue = [9, 0]\nclass = No vulnerable", fillcolor="#e58139"] ;
+0 [label="Emails Recibidos <= 129.5\nentropy = 0.99\nsamples = 14\nvalue = [9, 12]\nclass = Vulnerable", fillcolor="#cee6f8"] ;
+1 [label="Emails Clickados <= 10.0\nentropy = 0.75\nsamples = 9\nvalue = [3, 11]\nclass = Vulnerable", fillcolor="#6fb8ec"] ;
 0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
-2 [label="Emails Clickados <= 22.5\nentropy = 0.65\nsamples = 5\nvalue = [1, 5]\nclass = Vulnerable", fillcolor="#61b1ea"] ;
-0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
-3 [label="entropy = 0.0\nsamples = 2\nvalue = [0, 3]\nclass = Vulnerable", fillcolor="#399de5"] ;
-2 -> 3 ;
-4 [label="Emails Recibidos <= 63.0\nentropy = 0.92\nsamples = 3\nvalue = [1, 2]\nclass = Vulnerable", fillcolor="#9ccef2"] ;
-2 -> 4 ;
-5 [label="entropy = 0.0\nsamples = 1\nvalue = [0, 1]\nclass = Vulnerable", fillcolor="#399de5"] ;
+2 [label="entropy = 0.0\nsamples = 3\nvalue = [3, 0]\nclass = No vulnerable", fillcolor="#e58139"] ;
+1 -> 2 ;
+3 [label="entropy = 0.0\nsamples = 6\nvalue = [0, 11]\nclass = Vulnerable", fillcolor="#399de5"] ;
+1 -> 3 ;
+4 [label="Emails Recibidos <= 324.0\nentropy = 0.59\nsamples = 5\nvalue = [6, 1]\nclass = No vulnerable", fillcolor="#e9965a"] ;
+0 -> 4 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+5 [label="entropy = 0.0\nsamples = 3\nvalue = [5, 0]\nclass = No vulnerable", fillcolor="#e58139"] ;
 4 -> 5 ;
-6 [label="Emails Recibidos <= 99.0\nentropy = 1.0\nsamples = 2\nvalue = [1, 1]\nclass = No vulnerable", fillcolor="#ffffff"] ;
+6 [label="Emails Recibidos <= 377.0\nentropy = 1.0\nsamples = 2\nvalue = [1, 1]\nclass = No vulnerable", fillcolor="#ffffff"] ;
 4 -> 6 ;
-7 [label="entropy = 0.0\nsamples = 1\nvalue = [1, 0]\nclass = No vulnerable", fillcolor="#e58139"] ;
+7 [label="entropy = 0.0\nsamples = 1\nvalue = [0, 1]\nclass = Vulnerable", fillcolor="#399de5"] ;
 6 -> 7 ;
-8 [label="entropy = 0.0\nsamples = 1\nvalue = [0, 1]\nclass = Vulnerable", fillcolor="#399de5"] ;
+8 [label="entropy = 0.0\nsamples = 1\nvalue = [1, 0]\nclass = No vulnerable", fillcolor="#e58139"] ;
 6 -> 8 ;
 }

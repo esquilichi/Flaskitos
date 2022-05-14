@@ -44,7 +44,7 @@ if __name__ == '__main__':
     y_train = datos['vulnerable']
 
     # Split data for testing and for predicting
-    X_train, X_test, Y_train, y_test = train_test_split(x_train, y_train, test_size=0.5)
+    X_train, X_test, Y_train, y_test = train_test_split(x_train, y_train, test_size=0.3)
 
     rf_clf = RandomForestClassifier(criterion='entropy')
     rf_clf.fit(X_train, Y_train)
@@ -64,7 +64,5 @@ if __name__ == '__main__':
                         class_names=['No vulnerable', 'Vulnerable'],
                         rounded=True, proportion=False,
                         precision=2, filled=True)
-        rf_route = os.getcwd() + '/machineLearning/gráficos/'
-        call(['dot', '-Tpng', rf_route + 'random_forest.dot', '-o',
-              rf_route + 'random_forest_tree_' + str(i) + '.png',
-              '-Gdpi=600'], cwd='machineLearning', shell=True)
+        call(['dot', '-Tpng', 'machinelearning/gráficos/random_forest.dot',
+              '-o', 'machinelearning/gráficos/png/tree'+str(i)+'.png', '-Gdpi=600'])
