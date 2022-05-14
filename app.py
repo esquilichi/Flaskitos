@@ -89,25 +89,34 @@ def login_page():
         if log == True:
             session['user'] = (user)
             return redirect(url_for('dashboard'))
+        else:
+            return render_template('pages/sign-in.html', error="Credenciales no validos, registrate")
         
         
-
+@app.route('/logout')
+def log_out():
+    if 'user' in session:
+        session.pop('user')
+    return redirect(url_for('login_page'))
 
 @app.route('/dashboard')
 def dashboard():
-    l = ejercicio4()
-    exploit_list = exploitdb()
-    x = request.args.get('n', default=10, type=int)
-    critico = request.args.get('critico', default=True, type=bool)
-    print(x, critico)
-    c, conn = connect_db("Entrega1/database/database.db")
-    df1 = pd.read_sql_query("select * from users", conn)
-    df1 = porcentaje_peligro(df1)
-    df1 = usuarios_criticos(df1).head(x)
-    df1 = tratar_dataframe(df1, critico)
-    top_users_plot(df1)
-    data = plotlyF(df1)
-    return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data)
+    if 'user' in session:
+        l = ejercicio4()
+        exploit_list = exploitdb()
+        x = request.args.get('n', default=10, type=int)
+        critico = request.args.get('critico', default=True, type=bool)
+        print(x, critico)
+        c, conn = connect_db("Entrega1/database/database.db")
+        df1 = pd.read_sql_query("select * from users", conn)
+        df1 = porcentaje_peligro(df1)
+        df1 = usuarios_criticos(df1).head(x)
+        df1 = tratar_dataframe(df1, critico)
+        top_users_plot(df1)
+        data = plotlyF(df1)
+        return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data, username=session['user'])
+    else:
+        return redirect(url_for('login_page'))
 
 
 @app.route('/graphics/<id>', methods=['GET'])
