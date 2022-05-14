@@ -1,13 +1,9 @@
-import json
 import os
 from subprocess import call
 
-import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt
 from sklearn import tree, linear_model
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, accuracy_score, mean_squared_error
 from sklearn.tree import export_graphviz
 
