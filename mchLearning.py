@@ -5,13 +5,11 @@ from subprocess import call
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from sklearn import tree
+from sklearn import tree, linear_model
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import r2_score, accuracy_score
+from sklearn.metrics import r2_score, accuracy_score, mean_squared_error
 from sklearn.tree import export_graphviz
-import graphviz
 
 
 def calcular_cliclados(a, b):
@@ -44,7 +42,7 @@ if __name__ == '__main__':
     y_train = datos['vulnerable']
 
     # Split data for testing and for predicting
-    X_train, X_test, Y_train, y_test = train_test_split(x_train, y_train, test_size=0.3)
+    X_train, X_test, Y_train, y_test = train_test_split(x_train, y_train, test_size=0.5)
 
     rf_clf = RandomForestClassifier(criterion='entropy')
     rf_clf.fit(X_train, Y_train)
@@ -56,7 +54,17 @@ if __name__ == '__main__':
     print("Accuracy %.3f" % accuracy_score(y_test, y_predict))
 
     """
+    LINEAL REGRESSION
+    """
+    regr = linear_model.LinearRegression()
+    regr.fit(X_train, Y_train)
+    y_predict = regr.predict(X_test)
+    print("Mean squared error: %.2f" % mean_squared_error(y_test,
+                                                          y_predict))
+
+    """
     EXPORT GRAPHVIZ DOT AND PNG FILES OF DECISION TREES
+    """
     """
     for i in range(len(rf_clf.estimators_)):
         # print(i)
@@ -69,3 +77,5 @@ if __name__ == '__main__':
                         precision=2, filled=True)
         call(['dot', '-Tpng', 'machinelearning/gráficos/random_forest.dot',
               '-o', 'machinelearning/gráficos/png/tree'+str(i)+'.png', '-Gdpi=600'])
+    """
+
