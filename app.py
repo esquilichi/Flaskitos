@@ -1,4 +1,5 @@
 from datetime import datetime
+import re
 
 import pandas as pd
 from flask import Flask, render_template, redirect, url_for, request, send_file, Response, session
@@ -32,7 +33,12 @@ def init_database():
     cursor.execute("""CREATE TABLE IF NOT EXISTS users_flaskitos(user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(250), passwordHash VARCHAR(250), UNIQUE (username))""")
     con.commit()
 def register_user(username: str, password: str):
-    cursor.execute("""INSERT INTO users_flaskitos(username, passwordHash) VALUES (?, ?)""" , (sqlescape(username), sqlescape(hash_password(password))))
+    try:
+        cursor.execute("""INSERT INTO users_flaskitos(username, passwordHash) VALUES (?, ?)""" , (sqlescape(username), sqlescape(hash_password(password))))
+    except sqlite3.IntegrityError as pr:
+        raise
+    
+
     con.commit()
 def login_user(username: str, password: str):
     com = cursor.execute("""SELECT username, passwordHash FROM users_flaskitos WHERE username=(?)""", [sqlescape(username)])
@@ -77,6 +83,22 @@ def tratar_dataframe(df: pd.DataFrame, b: bool):
 def hello_world():
     return redirect(url_for('dashboard'))
 
+
+@app.route('/register', methods=['GET', 'POST'])
+def register_page():
+    if request.method == 'GET':
+        return render_template('pages/sign-up.html')
+    elif request.method == 'POST':
+        user = request.form['username']
+        password = request.form['password']
+        try:
+            register_user(user, password)
+            return redirect(url_for('login_page'))
+        except sqlite3.IntegrityError as e:
+            return render_template('pages/sign-up.html', error="Ya existe ese nombre de usuario")
+        except Exception as e:
+            print(e)
+            return redirect(url_for('register_page'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
