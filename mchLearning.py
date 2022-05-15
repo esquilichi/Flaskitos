@@ -8,7 +8,6 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from sklearn import tree, linear_model
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, accuracy_score, mean_squared_error
 from sklearn.tree import export_graphviz
 
@@ -82,27 +81,52 @@ if __name__ == '__main__':
     LINEAL REGRESSION
     """
 
-    print(len(x_train))
-    regression_train = x_train[15:]
-    regression_test = x_train[:15]
+    with open('machinelearning/users_IA_clases.json') as file:
+        data_users_entrenamiento = json.load(file)
 
-    regression_train_y = y_train[15:]
-    regression_test_y = y_train[:15]
-    # Create linear regression object
+    data_x = []
+    data_y = []
+
+    for user in data_users_entrenamiento["usuarios"]:
+        data_y.append([user["vulnerable"]])
+        if user["emails_phishing_recibidos"] != 0:
+            data_x.append([user["emails_phishing_clicados"], user["emails_phishing_recibidos"]])
+        else:
+            data_x.append([0, 0])
+
+    data_x_train = data_x[:-20]
+    data_x_test = data_x[-20:]
+    data_y_train = data_y[:-20]
+    data_y_test = data_y[-20:]
     regr = linear_model.LinearRegression()
-    # Train the model using the training sets
-    regr.fit(regression_train, regression_train_y)
-    # Make predictions using the testing set
-    predicted_y = regr.predict(regression_test)
-    # The mean squared error
-    print("Mean squared error: %.2f" % mean_squared_error(regression_test_y, predicted_y))
+    regr.fit(data_x_train, data_y_train)
 
-    plt.scatter(np.arange(0,len(regression_test),1), regression_test_y, color="black")
-    plt.plot(0.02 * np.array(regression_test) + regr.intercept_, predicted_y, color="blue", linewidth=3)
-    plt.xticks(())
-    plt.yticks(())
+    m = regr.coef_
+    b = regr.intercept_
+    x = data_x_test
+
+    data_y_pred = regr.predict(np.array(data_x_test))
+    for i in range(0, len(data_y_pred)):
+        if data_y_pred[i] < 0.5:
+            data_y_pred[i] = 0
+        else:
+            data_y_pred[i] = 1
+
+    print("Mean squared error: %.2f" % mean_squared_error(data_y_test, data_y_pred))
+
+    x_real = []
+    for i in x:
+        if i[1] == 0:
+            i[1] = 0.01
+        x_real.append(i[0] / i[1])
+    x = x_real
+
+    # Plot outputs
+    plt.scatter(np.array(x), np.array(data_y_test), color="black")
+    plt.plot((m[0][0] * np.array(x)) + b, np.array(x))
     plt.show()
 
+    print("Accuracy Regresión Lineal: ", accuracy_score(data_y_test, data_y_pred))
 
     """
     EXPORT GRAPHVIZ DOT AND PNG FILES OF DECISION TREES
