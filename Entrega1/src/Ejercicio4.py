@@ -62,11 +62,11 @@ def top_users_plot(df: pd.DataFrame):
     #plt.savefig("static/assets/graficos/users.png")
 
 
-def get_paginas_desactualizadas(df: pd.DataFrame):
+def get_paginas_desactualizadas(df: pd.DataFrame, limit=5):
     for i, r in df.iterrows():
         df._set_value(i, 'n_politicas', r['cookies'] + r['aviso'] + r['proteccion_datos'])
-    print(df.sort_values(['n_politicas', 'creacion'], ascending=[True, True]).head(5))
-    return df.sort_values(['n_politicas', 'creacion'], ascending=[True, True]).head(5)
+    print(df.sort_values(['n_politicas', 'creacion'], ascending=[True, True]).head(limit))
+    return df.sort_values(['n_politicas', 'creacion'], ascending=[True, True]).head(limit)
 
 def paginas_plot(df: pd.DataFrame):
     df.plot(x='url', y='n_politicas', kind='bar',figsize=(12.8, 7.2))
@@ -115,7 +115,7 @@ def conexiones_usuario(df: pd.DataFrame):
     plt.savefig(pathg + '/graphics/4-3.png', dpi=400)
     plt.show()
 
-def comparativa_porano(df: pd.DataFrame):
+def comparativa_porano(df: pd.DataFrame, limit=0):
     print("Tabla completa:")
     print(df.groupby('creacion').value_counts())
     anos = (df.groupby('creacion').groups.keys())
@@ -123,7 +123,7 @@ def comparativa_porano(df: pd.DataFrame):
     cumplen = []
     nocumplen = []
     lastyear = int(-9999999)
-    for el in df.groupby('creacion').value_counts().iteritems():
+    for el in df.groupby('creacion').value_counts().iteritems() and i <limit:
         if lastyear != el[0][0]:
             lastyear = el[0][0]
             i += 1

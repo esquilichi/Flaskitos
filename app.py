@@ -105,16 +105,24 @@ def dashboard():
         l = ejercicio4()
         exploit_list = exploitdb()
         x = request.args.get('n', default=10, type=int)
-        critico = request.args.get('critico', default=True, type=bool)
-        print(x, critico)
+        pages = request.args.get('pages', default=5, type=int)
+        critico = True if request.args.get('critico') == "True" else False
+        print("AQUIIII",x, critico)
         c, conn = connect_db("Entrega1/database/database.db")
         df1 = pd.read_sql_query("select * from users", conn)
         df1 = porcentaje_peligro(df1)
         df1 = usuarios_criticos(df1).head(x)
+        print(df1)
         df1 = tratar_dataframe(df1, critico)
         top_users_plot(df1)
-        data = plotlyF(df1)
-        return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data, username=session['user'])
+        data = plotlyF(df1, x)
+        c, conn = connect_db("Entrega1/database/database.db")
+        dframe2 = pd.read_sql_query("SELECT * FROM legal", conn)
+        dframe2 = get_paginas_desactualizadas(dframe2, limit=pages)
+        print(dframe2)
+        data2=plotlyP(dframe2, pages)
+        # data2 = plotlyF(dframe2)
+        return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data, username=session['user'], data2=data2)
     else:
         return redirect(url_for('login_page'))
 
@@ -122,10 +130,10 @@ def dashboard():
 @app.route('/graphics/<id>', methods=['GET'])
 def get_graphic(id):
     try:
+
         return send_file("Entrega1/graphics/" + id + ".png")
     except Exception as e:
         return str(e)
-
 
 @app.route('/users/<id>', methods=['GET'])
 def get_datajotason(id):
@@ -137,17 +145,27 @@ def get_datajotason(id):
         return Response(df1.to_json(orient='index'), mimetype='application/json')
     except Exception as e:
         return str(e)
+        
 
 
-def plotlyF(df: pd.DataFrame):
+
+def plotlyF(df: pd.DataFrame, x):
     trace = go.Bar(x=df["username"], y=df["porcentaje_click"])
-    layout = go.Layout(title="Top usuarios críticos", xaxis=dict(title="username"),
+    layout = go.Layout(title="Top %s usuarios críticos" % (x), xaxis=dict(title="username"),
                        yaxis=dict(title="porcentaje_click"))
     data = [trace]
     fig = go.Figure(data=data, layout=layout)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return fig_json
 
+def plotlyP(df: pd.DataFrame, x):
+    trace = go.Bar(x=df["url"], y=df["n_politicas"])
+    layout = go.Layout(title="Top %s webs vulnerables" % (x), xaxis=dict(title="web"),
+                       yaxis=dict(title="porcentaje_click"))
+    data = [trace]
+    fig = go.Figure(data=data, layout=layout)
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return fig_json
 
 def ejercicio4():
     r = requests.get("https://cve.circl.lu/api/last")
