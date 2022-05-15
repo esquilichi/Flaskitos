@@ -81,6 +81,8 @@ def get_driver():
 def tratar_dataframe(df: pd.DataFrame, b: bool):
     if not b:
         df = df.loc[df['porcentaje_click'] < 50]
+    else:
+        df = df.loc[df['porcentaje_click'] >= 50]
     return df
 
 
@@ -135,16 +137,16 @@ def dashboard():
         exploit_list = exploitdb()
         x = request.args.get('n', default=10, type=int)
         pages = request.args.get('pages', default=5, type=int)
-        critico = True if request.args.get('critico') == "True" else False
+        critico = True if request.args.get('critico') != "False" else False
         print("AQUIIII", x, critico)
         c, conn = connect_db("Entrega1/database/database.db")
         df1 = pd.read_sql_query("select * from users", conn)
         df1 = porcentaje_peligro(df1)
-        df1 = usuarios_criticos(df1).head(x)
+        df1 = usuarios_criticos(df1)
         print(df1)
         df1 = tratar_dataframe(df1, critico)
         top_users_plot(df1)
-        data = plotlyF(df1, x)
+        data = plotlyF(df1.head(x), x)
         c, conn = connect_db("Entrega1/database/database.db")
         dframe2 = pd.read_sql_query("SELECT * FROM legal", conn)
         dframe2 = get_paginas_desactualizadas(dframe2, limit=pages)
