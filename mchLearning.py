@@ -113,6 +113,8 @@ if __name__ == '__main__':
             data_y_pred[i] = 1
 
     print("Mean squared error: %.2f" % mean_squared_error(data_y_test, data_y_pred))
+    print("Accuracy Regresión Lineal: ", accuracy_score(data_y_test, data_y_pred))
+
 
     x_real = []
     for i in x:
@@ -126,7 +128,7 @@ if __name__ == '__main__':
     plt.plot((m[0][0] * np.array(x)) + b, np.array(x))
     plt.show()
 
-    print("Accuracy Regresión Lineal: ", accuracy_score(data_y_test, data_y_pred))
+
 
     """
     EXPORT GRAPHVIZ DOT AND PNG FILES OF DECISION TREES
