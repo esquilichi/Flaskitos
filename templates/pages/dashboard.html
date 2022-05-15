@@ -583,6 +583,34 @@
               </div>
             </div>
           </div>
+          <div class="card">
+            <div class="card-body p-3">
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="d-flex flex-column">
+                    <p class="mb-1 pt-2 text-bold">Prediccion de usuario critico</p>
+                  </div>
+                  <div class="card-body">
+                    <iframe style="max-height: 100px;" id="resultados" name="resultados"></iframe>
+                    <form role="form" method="post" action="/iatraining" target="resultados">
+                      <div class="mb-3">
+                        <input type="text" class="form-control" placeholder="Nombre" aria-label="Nombre" name="nombre">
+                      </div>
+                      <div class="mb-3">
+                        <input type="number" class="form-control" placeholder="Emails recibidos" aria-label="Emails recibidos" name="erecibidos">
+                      </div>
+                      <div class="mb-3">
+                        <input type="number" class="form-control" placeholder="Emails clickados" aria-label="Emails clickados" name="eclickados">
+                      </div>
+                      <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">Enviar</button>
+                    </form>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       <div class="row mt-4">
         <div class="col-lg-5 mb-lg-0 mb-4">

@@ -148,6 +148,16 @@ def dashboard():
     else:
         return redirect(url_for('login_page'))
 
+@app.route('/iatraining', methods=['POST'])
+def train_ai():
+    if request.method == 'POST':
+        name = request.form['nombre']
+        erecibidos = request.form['erecibidos']
+        eclickados = request.form['eclickados']
+        print(name, erecibidos, eclickados)
+        #Devuelve aqui los resultados y se muestran directamente
+        return name
+
 
 @app.route('/graphics/<id>', methods=['GET'])
 def get_graphic(id):
