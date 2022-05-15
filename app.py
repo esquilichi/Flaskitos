@@ -6,6 +6,8 @@ from flask import Flask, render_template, redirect, url_for, request, send_file,
 import os
 from selenium import webdriver
 from selenium.webdriver import FirefoxOptions
+from sklearn.ensemble import RandomForestClassifier
+
 from Entrega1.src.database import *
 from Entrega1.src.Ejercicio4 import *
 import requests
@@ -17,31 +19,36 @@ import sqlite3
 from sqlescapy import sqlescape
 from hashlib import sha1
 
-
 app = Flask(__name__)
-app.secret_key='probandoaquilaclaveultrasegura'
+app.secret_key = 'probandoaquilaclaveultrasegura'
 con = sqlite3.connect('./database/flaskitos.db', check_same_thread=False)
 cursor = con.cursor()
 
 
-def hash_password(password : str) -> str:
+def hash_password(password: str) -> str:
     return str(sha1(password.encode('latin1')).hexdigest())
 
 
 ### SQL functions
 def init_database():
-    cursor.execute("""CREATE TABLE IF NOT EXISTS users_flaskitos(user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(250), passwordHash VARCHAR(250), UNIQUE (username))""")
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS users_flaskitos(user_id INTEGER PRIMARY KEY AUTOINCREMENT, username VARCHAR(250), passwordHash VARCHAR(250), UNIQUE (username))""")
     con.commit()
+
+
 def register_user(username: str, password: str):
     try:
-        cursor.execute("""INSERT INTO users_flaskitos(username, passwordHash) VALUES (?, ?)""" , (sqlescape(username), sqlescape(hash_password(password))))
+        cursor.execute("""INSERT INTO users_flaskitos(username, passwordHash) VALUES (?, ?)""",
+                       (sqlescape(username), sqlescape(hash_password(password))))
     except sqlite3.IntegrityError as pr:
         raise
-    
 
     con.commit()
+
+
 def login_user(username: str, password: str):
-    com = cursor.execute("""SELECT username, passwordHash FROM users_flaskitos WHERE username=(?)""", [sqlescape(username)])
+    com = cursor.execute("""SELECT username, passwordHash FROM users_flaskitos WHERE username=(?)""",
+                         [sqlescape(username)])
     res = com.fetchall()
     if len(res) == 1:
         if res[0][1] == hash_password(password):
@@ -49,14 +56,12 @@ def login_user(username: str, password: str):
         else:
             return False
     elif len(res) == 0:
-        return "No existe" #Cambiar a excepcion
+        return "No existe"  # Cambiar a excepcion
     else:
         return "No te portes mal"
 
 
-
 ### Fin SQL functions
-
 
 
 def get_driver():
@@ -100,6 +105,7 @@ def register_page():
             print(e)
             return redirect(url_for('register_page'))
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'GET':
@@ -113,13 +119,14 @@ def login_page():
             return redirect(url_for('dashboard'))
         else:
             return render_template('pages/sign-in.html', error="Credenciales no validos, registrate")
-        
-        
+
+
 @app.route('/logout')
 def log_out():
     if 'user' in session:
         session.pop('user')
     return redirect(url_for('login_page'))
+
 
 @app.route('/dashboard')
 def dashboard():
@@ -129,7 +136,7 @@ def dashboard():
         x = request.args.get('n', default=10, type=int)
         pages = request.args.get('pages', default=5, type=int)
         critico = True if request.args.get('critico') == "True" else False
-        print("AQUIIII",x, critico)
+        print("AQUIIII", x, critico)
         c, conn = connect_db("Entrega1/database/database.db")
         df1 = pd.read_sql_query("select * from users", conn)
         df1 = porcentaje_peligro(df1)
@@ -142,11 +149,13 @@ def dashboard():
         dframe2 = pd.read_sql_query("SELECT * FROM legal", conn)
         dframe2 = get_paginas_desactualizadas(dframe2, limit=pages)
         print(dframe2)
-        data2=plotlyP(dframe2, pages)
+        data2 = plotlyP(dframe2, pages)
         # data2 = plotlyF(dframe2)
-        return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data, username=session['user'], data2=data2)
+        return render_template('pages/dashboard.html', item=l, exploits=exploit_list, data=data,
+                               username=session['user'], data2=data2)
     else:
         return redirect(url_for('login_page'))
+
 
 @app.route('/iatraining', methods=['POST'])
 def train_ai():
@@ -155,8 +164,27 @@ def train_ai():
         erecibidos = request.form['erecibidos']
         eclickados = request.form['eclickados']
         print(name, erecibidos, eclickados)
-        #Devuelve aqui los resultados y se muestran directamente
-        return name
+        if eclickados > erecibidos:
+            return 'Creo que esto no va así'
+
+        col = ['emails_phishing_recibidos', 'emails_phishing_clicados', 'vulnerable']
+        with open('machinelearning/train.csv', 'r') as f:
+            datos = pd.read_csv(f, names=col)
+
+        x_train = datos.drop('vulnerable', axis=1)
+        y_train = datos['vulnerable']
+
+        rf_clf = RandomForestClassifier(max_depth=2, random_state=0, n_estimators=10)
+        rf_clf.fit(x_train, y_train)
+
+        predecir = pd.DataFrame({'emails_phishing_recibidos': [erecibidos], 'emails_phishing_clicados': [eclickados]})
+        # Predict data on test part
+        y_predict = rf_clf.predict(predecir)
+        if y_predict[0] == 1:
+            vuln = name + ' ES VULNERABLE'
+        else:
+            vuln = name + ' NO ES VULNERABLE'
+        return vuln
 
 
 @app.route('/graphics/<id>', methods=['GET'])
@@ -166,6 +194,7 @@ def get_graphic(id):
         return send_file("Entrega1/graphics/" + id + ".png")
     except Exception as e:
         return str(e)
+
 
 @app.route('/users/<id>', methods=['GET'])
 def get_datajotason(id):
@@ -177,8 +206,6 @@ def get_datajotason(id):
         return Response(df1.to_json(orient='index'), mimetype='application/json')
     except Exception as e:
         return str(e)
-        
-
 
 
 def plotlyF(df: pd.DataFrame, x):
@@ -190,6 +217,7 @@ def plotlyF(df: pd.DataFrame, x):
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return fig_json
 
+
 def plotlyP(df: pd.DataFrame, x):
     trace = go.Bar(x=df["url"], y=df["n_politicas"])
     layout = go.Layout(title="Top %s webs vulnerables" % (x), xaxis=dict(title="web"),
@@ -198,6 +226,7 @@ def plotlyP(df: pd.DataFrame, x):
     fig = go.Figure(data=data, layout=layout)
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return fig_json
+
 
 def ejercicio4():
     r = requests.get("https://cve.circl.lu/api/last")
